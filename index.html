@@ -139,9 +139,7 @@
       z-index: 1;
       width: 40vw;
       height: 40vh;
-      overflow-y: auto;
-      scrollbar-width: none; /* Firefox */
-      -ms-overflow-style: none; /* IE/Edge */
+      overflow-y: hidden;
       overflow-x: hidden;
       -webkit-mask-image: linear-gradient(to bottom,
           transparent 0%,
@@ -161,7 +159,7 @@
     }
 
     .essay-box::-webkit-scrollbar {
-      display: none;
+      width: 3px;
     }
 
     .essay-box::-webkit-scrollbar-track {
@@ -515,6 +513,22 @@
 
 <body>
 
+  <!-- ── Topbar ── -->
+  <nav class="topbar">
+    <div class="logo">
+      <div class="logo-mark">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1A0E08" stroke-width="2.5">
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+        </svg>
+      </div>
+      <span>The Genesis Machine</span>
+    </div>
+    <div class="status-pill">
+      <div class="status-dot" id="status-dot"></div>
+      <span id="status-label">initializing</span>
+    </div>
+  </nav>
+
   <div class="container">
     <div class="essay-box" id="essay-box">
       <div class="essay-inner" id="essay-inner">
@@ -643,9 +657,11 @@
         btn.classList.add('visible');
       }
 
-      statusLabel.textContent = 'done';
-      statusDot.style.animation = 'none';
-      statusDot.style.opacity = '0.35';
+      if (statusLabel) statusLabel.textContent = 'done';
+      if (statusDot) {
+        statusDot.style.animation = 'none';
+        statusDot.style.opacity = '0.35';
+      }
       essayBox.classList.add('done');
       setTimeout(() => {
         essayBox.scrollTo({ top: 0, behavior: 'smooth' });
