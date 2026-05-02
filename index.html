@@ -139,7 +139,9 @@
       z-index: 1;
       width: 40vw;
       height: 40vh;
-      overflow-y: hidden;
+      overflow-y: auto;
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none; /* IE/Edge */
       overflow-x: hidden;
       -webkit-mask-image: linear-gradient(to bottom,
           transparent 0%,
@@ -159,7 +161,7 @@
     }
 
     .essay-box::-webkit-scrollbar {
-      width: 3px;
+      display: none;
     }
 
     .essay-box::-webkit-scrollbar-track {
