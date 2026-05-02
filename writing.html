@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Writing — Gift Braimah</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+  <style>
+    /* ═══════════════════════════ TOKENS ═══════════════════════════ */
+    :root {
+      --bg: #111009;
+      --bg1: #181512;
+      --bg2: #201C18;
+      --bg3: #2A2521;
+      --accent: #D97757;
+      --text: #F5AD8C;
+      --text2: #C49070;
+      --muted: #7A6E66;
+      --muted2: #3E3830;
+      --border: rgba(245, 173, 140, 0.09);
+      --border2: rgba(245, 173, 140, 0.18);
+      --sans: 'DM Sans', sans-serif;
+      --serif: 'Lora', Georgia, serif;
+      --mono: 'Share Tech Mono', monospace;
+    }
+
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ─── Ambient atmosphere ─── */
+    .atmosphere {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .atmosphere::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 55% at 50% 50%, rgba(217, 119, 87, 0.04) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 35% at 10% 10%, rgba(91, 155, 213, 0.03) 0%, transparent 60%);
+    }
+
+    /* ─── Topbar ─── */
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      height: 54px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2.5rem;
+      border-bottom: 1px solid var(--border);
+      background: rgba(17, 16, 9, 0.85);
+      backdrop-filter: blur(16px);
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-img {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--accent);
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .logo-img:hover {
+      transform: scale(1.08);
+    }
+
+    .topbar-name {
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .topbar-sep {
+      width: 1px;
+      height: 16px;
+      background: var(--muted2);
+    }
+
+    .topbar-section {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .nav-link {
+      font-size: 13px;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-link:hover {
+      color: var(--text);
+    }
+
+    .nav-link.active {
+      color: var(--text);
+    }
+
+    .hire-btn {
+      font-family: var(--sans);
+      font-size: 12px;
+      font-weight: 500;
+      color: #1A0E08;
+      background: var(--accent);
+      border: none;
+      border-radius: 8px;
+      padding: 7px 16px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s;
+      box-shadow: 0 2px 12px rgba(217, 119, 87, 0.3);
+    }
+
+    .hire-btn:hover {
+      box-shadow: 0 4px 20px rgba(217, 119, 87, 0.45);
+      transform: translateY(-1px);
+    }
+
+    /* ─── Page header ─── */
+    .page-header {
+      max-width: 1100px;
+      margin: 140px auto 60px;
+      padding: 0 2.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .page-title {
+      font-family: var(--serif);
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 400;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+    }
+
+    .page-sub {
+      font-family: var(--sans);
+      font-size: 18px;
+      color: var(--text2);
+      max-width: 600px;
+    }
+
+    /* ─── Blog Grid ─── */
+    .blog-container {
+      max-width: 1100px;
+      margin: 0 auto 120px;
+      padding: 0 2.5rem;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 3rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    @media (max-width: 850px) {
+      .blog-container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .post-card {
+      display: block;
+      text-decoration: none;
+      background: var(--bg1);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .post-card:hover {
+      border-color: var(--border2);
+      transform: translateY(-6px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .post-image {
+      position: relative;
+      height: 240px;
+      overflow: hidden;
+    }
+
+    .post-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .post-card:hover .post-image img {
+      transform: scale(1.05);
+    }
+
+    .post-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 40%, rgba(24, 21, 18, 0.8));
+    }
+
+    .post-body {
+      padding: 2rem;
+    }
+
+    .post-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 1rem;
+    }
+
+    .post-tag {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      border: 1px solid rgba(217, 119, 87, 0.2);
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    .post-date {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .post-title {
+      font-family: var(--serif);
+      font-size: 22px;
+      color: var(--text);
+      line-height: 1.3;
+      margin-bottom: 1rem;
+      font-weight: 400;
+    }
+
+    .post-excerpt {
+      font-family: var(--sans);
+      font-size: 15px;
+      color: var(--text2);
+      line-height: 1.6;
+      margin-bottom: 2rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .post-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .read-more {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    /* ─── Profile Modal ─── */
+    .profile-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 8, 6, 0.85);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 300;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .profile-modal-backdrop.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .profile-modal {
+      background: var(--bg2);
+      border: 1px solid var(--border2);
+      border-radius: 20px;
+      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6);
+      width: min(400px, 92vw);
+      transform: scale(0.95) translateY(10px);
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      overflow: hidden;
+    }
+
+    .profile-modal-backdrop.open .profile-modal {
+      transform: scale(1) translateY(0);
+    }
+
+    .p-modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .p-modal-title {
+      font-family: var(--sans);
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .p-modal-close {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .p-modal-body {
+      padding: 0;
+    }
+
+    .p-modal-body img {
+      width: 100%;
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="atmosphere"></div>
+
+  <!-- ── Topbar ── -->
+  <nav class="topbar">
+    <div class="topbar-left">
+      <img src="https://i.ibb.co/JRV0C3r5/Snapchat-1213438513-01.jpg" alt="Gift Braimah" class="logo-img"
+        id="profile-trigger">
+      <a href="index.html" class="topbar-name" style="text-decoration: none;">Gift Braimah</a>
+      <span class="topbar-sep"></span>
+      <span class="topbar-section">Writing</span>
+    </div>
+    <div class="topbar-right">
+      <a class="nav-link" href="about.html">About</a>
+      <a class="nav-link" href="portfolio.html">Work</a>
+      <a class="nav-link active" href="writing.html">Writing</a>
+      <button class="hire-btn" onclick="openHire()" id="hire-btn">Hire Me</button>
+    </div>
+  </nav>
+
+  <!-- ── Page header ── -->
+  <div class="page-header">
+    <h1 class="page-title">My Thoughts</h1>
+    <p class="page-sub">Essays on cognitive architectures, autonomous agents, and the quest for general intelligence.
+    </p>
+  </div>
+
+  <!-- ── Blog Grid ── -->
+  <div class="blog-container">
+    <!-- Post 1 -->
+    <a href="the-genesis-machine.html" class="post-card">
+      <div class="post-image">
+        <img src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&q=80&w=800"
+          alt="The Genesis Machine">
+        <div class="post-overlay"></div>
+      </div>
+      <div class="post-body">
+        <div class="post-meta">
+          <span class="post-tag">Architecture</span>
+          <span class="post-date">May 02, 2026</span>
+        </div>
+        <h2 class="post-title">The Genesis Machine: Why Intelligence is an Architectural Problem</h2>
+        <p class="post-excerpt">Scaling laws alone won't get us to AGI. We need to rethink how AI systems are organized,
+          moving from single linear models to multi-agent "system of systems".</p>
+        <div class="post-footer">
+          <div class="read-more">
+            Read Essay
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M2 6h8M7 3l3 3-3 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </a>
+
+    <!-- Post 2 -->
+    <a href="neuro-mimetic-memory.html" class="post-card">
+      <div class="post-image">
+        <img src="https://images.unsplash.com/photo-1507413245164-6160d8298b31?auto=format&fit=crop&q=80&w=800"
+          alt="The Obsidian Paradigm">
+        <div class="post-overlay"></div>
+      </div>
+      <div class="post-body">
+        <div class="post-meta">
+          <span class="post-tag">Philosophy</span>
+          <span class="post-date">April 04, 2026</span>
+        </div>
+        <h2 class="post-title">The Obsidian Paradigm: Engineering Machine Contemplation</h2>
+        <p class="post-excerpt">The contemporary trajectory of AI is constrained by linear, stimulus-response
+          generation. Obsidian introduces 'Forced Lateral Contemplation'—trapping artificial intellect within a
+          multi-dimensional cognitive loop.</p>
+        <div class="post-footer">
+          <div class="read-more">
+            Read Essay
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M2 6h8M7 3l3 3-3 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </a>
+
+    <!-- Post 3 -->
+    <a href="autonomous-agents-safety.html" class="post-card">
+      <div class="post-image">
+        <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=800"
+          alt="The ACMS">
+        <div class="post-overlay"></div>
+      </div>
+      <div class="post-body">
+        <div class="post-meta">
+          <span class="post-tag">Memory Architecture</span>
+          <span class="post-date">June 18, 2025</span>
+        </div>
+        <h2 class="post-title">The Associative Cognitive Memory System (ACMS)</h2>
+        <p class="post-excerpt">The evolution of AI has reached a bottleneck: long-term memory. The ACMS introduces a
+          radical departure from traditional storage, treating knowledge as an active grid of autonomous digital
+          neurons.</p>
+        <div class="post-footer">
+          <div class="read-more">
+            Read Essay
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M2 6h8M7 3l3 3-3 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </a>
+
+    <!-- Post 4 -->
+    <a href="cognitive-substrate.html" class="post-card">
+      <div class="post-image">
+        <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=800"
+          alt="The Cognitive Substrate">
+        <div class="post-overlay"></div>
+      </div>
+      <div class="post-body">
+        <div class="post-meta">
+          <span class="post-tag">Ecosystem Architecture</span>
+          <span class="post-date">December 1, 2025</span>
+        </div>
+        <h2 class="post-title">The Cognitive Substrate: A Biological Paradigm</h2>
+        <p class="post-excerpt">Software environments are typically treated as static artifacts. The Cognitive Substrate
+          transfigures code and infrastructure into a living connectome where software feels stress and evolves.</p>
+        <div class="post-footer">
+          <div class="read-more">
+            Read Essay
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M2 6h8M7 3l3 3-3 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </a>
+
+    <!-- Post 5 -->
+    <a href="autonomous-cognitive-network.html" class="post-card">
+      <div class="post-image">
+        <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&q=80&w=800" alt="ACN">
+        <div class="post-overlay"></div>
+      </div>
+      <div class="post-body">
+        <div class="post-meta">
+          <span class="post-tag">Engineering Systems</span>
+          <span class="post-date">December 23, 2024</span>
+        </div>
+        <h2 class="post-title">The Autonomous Cognitive Network (ACN)</h2>
+        <p class="post-excerpt">The ACN is a foundational philosophy of autonomic computing, treating software synthesis
+          as the growth of a living organism through fractal node topology and cognitive segregation.</p>
+        <div class="post-footer">
+          <div class="read-more">
+            Read Essay
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M2 6h8M7 3l3 3-3 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </a>
+
+    <!-- Post 6 -->
+    <a href="sovereign-engineer.html" class="post-card">
+      <div class="post-image">
+        <img src="https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?auto=format&fit=crop&q=80&w=800"
+          alt="Sovereign Engineer">
+        <div class="post-overlay"></div>
+      </div>
+      <div class="post-body">
+        <div class="post-meta">
+          <span class="post-tag">Philosophy</span>
+          <span class="post-date">January 15, 2025</span>
+        </div>
+        <h2 class="post-title">The Sovereign Engineer: Philosophical Foundations</h2>
+        <p class="post-excerpt">Transitioning from Assisted Programming to Autonomous Software Synthesis. This essay
+          outlines the foundations required to build a system possessing architectural intuition and recursive
+          self-evolution.</p>
+        <div class="post-footer">
+          <div class="read-more">
+            Read Essay
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M2 6h8M7 3l3 3-3 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </a>
+
+    <!-- Post 7 -->
+    <a href="cognitive-spatial-fabric.html" class="post-card">
+      <div class="post-image">
+        <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=800"
+          alt="CSF">
+        <div class="post-overlay"></div>
+      </div>
+      <div class="post-body">
+        <div class="post-meta">
+          <span class="post-tag">Spatial Intelligence</span>
+          <span class="post-date">December 1, 2025</span>
+        </div>
+        <h2 class="post-title">The Cognitive Spatial Fabric (CSF): Universal Digital Twin</h2>
+        <p class="post-excerpt">Architecting a unified 4D substrate for perception, memory, and physics. The CSF
+          empowers autonomous networks to manage planetary-scale robotic swarms with predictive foresight.</p>
+        <div class="post-footer">
+          <div class="read-more">
+            Read Essay
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M2 6h8M7 3l3 3-3 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </a>
+  </div>
+
+  
+
+  <!-- Hire Modal -->
+  <div class="profile-modal-backdrop" id="hire-modal-backdrop">
+    <div class="profile-modal" style="width: min(440px, 92vw);">
+      <div class="p-modal-header">
+        <div class="p-modal-title">Let's Connect</div>
+        <button class="p-modal-close" id="hire-modal-close">&times;</button>
+      </div>
+      <div class="p-modal-body" style="padding: 2.5rem 2rem; text-align: center;">
+        <p style="color: var(--text2); font-size: 16px; margin-bottom: 2rem; line-height: 1.6; font-family: var(--serif);">
+          For high-fidelity engineering or AI architecture inquiries, please reach out via <strong>Email</strong> or <strong>WhatsApp</strong>. These are my primary contact channels.
+        </p>
+        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+          <a href="mailto:braimahgifted@gmail.com" class="hire-modal-link">
+            <svg width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M2 4L8 8L14 4M2 12H14V4H2V12Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>
+            braimahgifted@gmail.com
+          </a>
+          <a href="https://wa.me/2349113083786" target="_blank" class="hire-modal-link" style="background: rgba(37, 211, 102, 0.1); border-color: rgba(37, 211, 102, 0.2); color: #25D366;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+            Chat on WhatsApp
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .hire-modal-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 1.25rem;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      color: var(--text);
+      text-decoration: none;
+      font-family: var(--sans);
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+    .hire-modal-link:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+  </style>
+  <script>
+    // Profile Modal Logic
+    const pModal = document.getElementById('profile-modal-backdrop');
+    const pTrigger = document.getElementById('profile-trigger');
+    const pClose = document.getElementById('profile-modal-close');
+
+    if (pTrigger) {
+      pTrigger.addEventListener('click', () => pModal.classList.add('open'));
+    }
+    if (pClose) {
+      pClose.addEventListener('click', () => pModal.classList.remove('open'));
+    }
+    if (pModal) {
+      pModal.addEventListener('click', (e) => {
+        if (e.target === pModal) pModal.classList.remove('open');
+      });
+    }
+
+    // Hire Modal Logic
+    const hModal = document.getElementById('hire-modal-backdrop');
+    const hClose = document.getElementById('hire-modal-close');
+    window.openHire = () => hModal.classList.add('open');
+    if (hClose) hClose.addEventListener('click', () => hModal.classList.remove('open'));
+    if (hModal) hModal.addEventListener('click', (e) => { if (e.target === hModal) hModal.classList.remove('open'); });
+  </script>
+</body>
+
+</html>

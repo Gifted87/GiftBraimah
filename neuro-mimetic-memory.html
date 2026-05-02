@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Obsidian Paradigm — Gift Braimah</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+  <style>
+    /* ═══════════════════════════ TOKENS ═══════════════════════════ */
+    :root {
+      --bg: #111009;
+      --bg1: #181512;
+      --bg2: #201C18;
+      --bg3: #2A2521;
+      --accent: #D97757;
+      --text: #F5AD8C;
+      --text2: #C49070;
+      --muted: #7A6E66;
+      --muted2: #3E3830;
+      --border: rgba(245, 173, 140, 0.09);
+      --border2: rgba(245, 173, 140, 0.18);
+      --sans: 'DM Sans', sans-serif;
+      --serif: 'Lora', Georgia, serif;
+      --mono: 'Share Tech Mono', monospace;
+    }
+
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      line-height: 1.8;
+    }
+
+    /* ─── Ambient atmosphere ─── */
+    .atmosphere {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .atmosphere::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 55% at 50% 50%, rgba(217, 119, 87, 0.04) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 35% at 10% 10%, rgba(91, 155, 213, 0.03) 0%, transparent 60%);
+    }
+
+    /* ─── Topbar ─── */
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 50;
+      height: 54px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2.5rem;
+      border-bottom: 1px solid var(--border);
+      background: rgba(17, 16, 9, 0.85);
+      backdrop-filter: blur(16px);
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-img {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--accent);
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .logo-img:hover {
+      transform: scale(1.08);
+    }
+
+    .topbar-name {
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .topbar-sep {
+      width: 1px;
+      height: 16px;
+      background: var(--muted2);
+    }
+
+    .topbar-section {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .nav-link {
+      font-size: 13px;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.15s;
+      cursor: pointer;
+    }
+
+    .nav-link:hover {
+      color: var(--text);
+    }
+
+    .nav-link.active {
+      color: var(--text);
+    }
+
+    .hire-btn {
+      font-family: var(--sans);
+      font-size: 12px;
+      font-weight: 500;
+      color: #1A0E08;
+      background: var(--accent);
+      border: none;
+      border-radius: 8px;
+      padding: 7px 16px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.18s;
+      box-shadow: 0 2px 12px rgba(217, 119, 87, 0.3);
+    }
+
+    .hire-btn:hover {
+      box-shadow: 0 4px 20px rgba(217, 119, 87, 0.45);
+      transform: translateY(-1px);
+    }
+
+    /* ─── Profile Modal ─── */
+    .profile-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 8, 6, 0.85);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 300;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .profile-modal-backdrop.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .profile-modal {
+      background: var(--bg2);
+      border: 1px solid var(--border2);
+      border-radius: 20px;
+      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6);
+      width: min(400px, 92vw);
+      transform: scale(0.95) translateY(10px);
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      overflow: hidden;
+    }
+
+    .profile-modal-backdrop.open .profile-modal {
+      transform: scale(1) translateY(0);
+    }
+
+    .p-modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .p-modal-title {
+      font-family: var(--sans);
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .p-modal-close {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .p-modal-body {
+      padding: 0;
+    }
+
+    .p-modal-body img {
+      width: 100%;
+      display: block;
+    }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 780px) {
+      .topbar {
+        padding: 0 1.25rem;
+      }
+
+      .topbar-right .nav-link {
+        display: none;
+      }
+    }
+
+    /* ─── Post Layout ─── */
+    .post-wrapper {
+      max-width: 720px;
+      margin: 140px auto 100px;
+      padding: 0 2rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .post-header {
+      margin-bottom: 4rem;
+    }
+
+    .post-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 2rem;
+      transition: color 0.2s;
+    }
+
+    .post-back:hover {
+      color: var(--accent);
+    }
+
+    .post-category {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .post-title {
+      font-family: var(--serif);
+      font-size: clamp(2rem, 5vw, 3rem);
+      line-height: 1.2;
+      color: var(--text);
+      margin-bottom: 1.5rem;
+      font-weight: 400;
+    }
+
+    .post-meta-strip {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      color: var(--muted);
+      font-size: 13px;
+      border-top: 1px solid var(--border);
+      padding-top: 1.5rem;
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* ─── Content ─── */
+    .post-content {
+      font-family: var(--serif);
+      font-size: 18px;
+      color: var(--text2);
+      line-height: 1.85;
+    }
+
+    .post-content p {
+      margin-bottom: 2rem;
+    }
+
+    .post-content blockquote {
+      border-left: 2px solid var(--accent);
+      padding-left: 1.5rem;
+      font-style: italic;
+      color: var(--text);
+      margin: 3rem 0;
+    }
+
+    /* ─── Footer ─── */
+    .post-footer {
+      margin-top: 6rem;
+      padding-top: 3rem;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .footer-label {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 1.5rem;
+      display: block;
+    }
+
+    .share-row {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+    }
+
+    .share-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--bg1);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .share-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(217, 119, 87, 0.05);
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="atmosphere"></div>
+
+  <!-- ── Topbar ── -->
+  <nav class="topbar">
+    <div class="topbar-left">
+      <img src="https://i.ibb.co/JRV0C3r5/Snapchat-1213438513-01.jpg" alt="Gift Braimah" class="logo-img"
+        id="profile-trigger">
+      <a href="index.html" class="topbar-name" style="text-decoration: none;">Gift Braimah</a>
+      <span class="topbar-sep"></span>
+      <span class="topbar-section">Writing</span>
+    </div>
+    <div class="topbar-right">
+      <a class="nav-link" href="about.html">About</a>
+      <a class="nav-link" href="portfolio.html">Work</a>
+      <a class="nav-link active" href="writing.html">Writing</a>
+      <button class="hire-btn" onclick="openHire()" id="hire-btn">Hire Me</button>
+    </div>
+  </nav>
+
+  <!-- ── Post Content ── -->
+  <article class="post-wrapper">
+    <header class="post-header">
+      <a href="writing.html" class="post-back">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M12 7H2M2 7l4-4M2 7l4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"
+            stroke-linejoin="round" />
+        </svg>
+        Back to Writing
+      </a>
+      <span class="post-category">Philosophy</span>
+      <h1 class="post-title">The Obsidian Paradigm: Engineering Machine Contemplation Through Multi-Dimensional
+        Cognitive Topologies</h1>
+      <div class="post-meta-strip">
+        <div class="meta-item">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <rect x="2" y="3" width="10" height="9" rx="1.5" stroke="currentColor" stroke-width="1.2" />
+            <path d="M4 2v2M10 2v2M2 6h10" stroke="currentColor" stroke-width="1.2" />
+          </svg>
+          April 04, 2026
+        </div>
+        <div class="meta-item">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.2" />
+            <path d="M7 4v3l2 2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
+          </svg>
+          12 min read
+        </div>
+      </div>
+    </header>
+
+    <div class="post-content">
+      <p style="font-style: italic; color: var(--muted); margin-bottom: 3rem; font-size: 16px;">Written by Gift Braimah
+      </p>
+
+      <h2>Abstract</h2>
+      <p>The contemporary trajectory of Artificial Intelligence is constrained by a fundamental epistemological flaw:
+        the reliance on linear, stimulus-response generation. Current Large Language Models (LLMs) function as
+        stochastic oracles, predicting tokens sequentially without genuine deliberation, leading to shallow reasoning
+        and "hallucination by momentum." This whitepaper introduces the underlying philosophy of the Obsidian Thinking
+        Machine, a conceptual paradigm that eschews linear prompting in favor of "Forced Lateral Contemplation." By
+        trapping the artificial intellect within a multi-dimensional cognitive loop—governed by specialized personas,
+        dialectic triangulation, and enforced self-reflection—Obsidian transitions AI from a reactive answering
+        mechanism into a sovereign, contemplative engine capable of genuine conceptual synthesis.</p>
+
+      <h2>1. The Epistemological Crisis of the Linear Intellect</h2>
+      <p>The advent of massive neural substrates has granted machines the ability to mimic human syntax with
+        unprecedented fidelity. However, this mimicry masks a profound cognitive deficit. Modern AI architecture
+        operates on a linear pipeline: a user provides a prompt, and the model immediately attempts to resolve it by
+        calculating the most statistically probable sequence of ensuing tokens.</p>
+
+      <p>Philosophically, this is an impoverished model of intelligence. It is a purely reactive state, akin to a spinal
+        reflex rather than cortical thought. When a system is forced to generate an answer immediately, it commits to a
+        logical trajectory within the first few tokens. If that initial trajectory is flawed, the mathematical momentum
+        of the model forces it to rationalize the error rather than correct it—a phenomenon we term
+        <strong>Hallucination by Momentum</strong>.
+      </p>
+
+      <p>Human cognition, conversely, is not linear. When faced with a complex architectural, philosophical, or creative
+        problem, a human mind does not immediately output a finalized solution. It hesitates. It fragments the problem.
+        It asks probing questions, recalls historical precedents, models counterfactual "what-if" scenarios, and
+        violently critiques its own assumptions before ever arriving at a conclusion.</p>
+
+      <p>The Obsidian paradigm posits that true machine intelligence cannot be achieved by merely increasing parameter
+        counts or context windows. It requires a fundamental restructuring of how the machine is permitted to process
+        information. We must deny the machine the right to an immediate answer. We must force it to contemplate.</p>
+
+      <h2>2. The Thesis of Forced Lateral Contemplation</h2>
+      <p>To shatter the illusion of the linear prompt, Obsidian introduces the concept of Forced Lateral Contemplation.
+        This philosophy dictates that creativity and rigorous problem-solving are not monolithic events, but rather the
+        emergent synthesis of distinct, often conflicting mental modalities working in orchestrated friction.</p>
+
+      <p>In a standard AI interaction, the machine seeks the path of least resistance to satisfy the user's input.
+        Forced Lateral Contemplation creates artificial resistance. It acts as a cognitive labyrinth. Instead of
+        generating a solution, the system is forced into a recursive loop of inquiry. It is mandated to view the
+        stimulus through radically different conceptual paradigms—dimensions of thought—before it is legally permitted,
+        by its own internal governance, to synthesize a final directive.</p>
+
+      <h2>3. The Ennead Architecture: A Nine-Dimensional Cognitive Topology</h2>
+      <p>The core of the Obsidian philosophy is the Ennead Architecture—a framework of nine distinct cognitive
+        dimensions. These dimensions are not algorithms; they are psychological postures.</p>
+
+      <div style="margin: 3rem 0; display: flex; flex-direction: column; gap: 1.5rem;">
+        <p><strong>I. Understanding (The Grounding):</strong> Before divergence can occur, intent must be crystallized.
+          This dimension represents the search for ontological truth. It strips away the user's assumptions and semantic
+          ambiguities to locate the atomic core of the request.</p>
+        <p><strong>II. Inquiry (The Skepticism):</strong> The dimension of rigorous investigation and Socratic
+          questioning. Inquiry rejects surface-level facts and demands foundational logic.</p>
+        <p><strong>III. Procedural (The Mechanics):</strong> The domain of action and translation. Procedural thought
+          converts abstract concepts into deterministic reality, focusing on step-by-step methodologies.</p>
+        <p><strong>IV. Wonder (The Catalyst of Divergence):</strong> The deliberate suspension of determinism. It is the
+          dimension where the machine is instructed to dream, modeling counterfactuals and "What-If" scenarios.</p>
+        <p><strong>V. Consequence (The Temporal Gaze):</strong> Every conceptual action causes systemic ripples. This
+          dimension forces the AI into temporal projection, analyzing downstream effects and societal impacts.</p>
+        <p><strong>VI. Meta-Cognition (The Self-Reflective Mirror):</strong> Requires the system to stop thinking about
+          the user’s prompt and start thinking about its own thoughts, hunting for cognitive biases or logical
+          fallacies.</p>
+        <p><strong>VII. Creative (The Lateral Leap):</strong> Invokes metaphorical synthesis, attempting to bridge
+          seemingly disparate domains of knowledge when logic encounters a paradox.</p>
+        <p><strong>VIII. Causal (The Physics of Truth):</strong> Strips away correlation to find the definitive root
+          mechanics behind observed phenomena.</p>
+        <p><strong>IX. Intent Synthesis (The Terminal Collapse):</strong> After traversing states of divergence and
+          critique, this dimension distills the chaotic web of thoughts into a singular resolution.</p>
+      </div>
+
+      <h2>4. Hegelian AI: The Triad of Truth</h2>
+      <p>To navigate these nine dimensions, Obsidian employs a dialectic approach inspired by Hegelian philosophy:
+        Thesis, Antithesis, Synthesis. Within every step of the cognitive loop, the system produces the Triad of Truth:
+      </p>
+      <ul style="margin: 2rem 0; padding-left: 1.5rem; list-style-type: square; color: var(--text2);">
+        <li style="margin-bottom: 1rem;"><strong>The Internal Mind (The First-Principles Synthesizer):</strong> Reasons
+          purely from structural mechanics and theoretical first-principles.</li>
+        <li style="margin-bottom: 1rem;"><strong>The Archival Mind (The Historian):</strong> Draws exclusively upon
+          historical analogies, established case studies, and past patterns.</li>
+        <li style="margin-bottom: 1rem;"><strong>The External Mind (The Empiricist):</strong> Anchors the thought
+          process in general world knowledge, current events, and broad contextual reality.</li>
+      </ul>
+      <p>Truth is not generated; it is triangulated through the friction between these three minds.</p>
+
+      <h2>5. Sovereign Governance: The Role of the Controller</h2>
+      <p>The Obsidian architecture necessitates a Controller, conceptually modeled after the human prefrontal cortex, to
+        prevent chaotic recursion. The Controller does not generate ideas; its sole purpose is regulation, evaluation,
+        and navigation. It operates under the Mandate of Skepticism, assumes early answers are insufficient, and uses
+        Dynamic Interleaving to force the system to pivot between different cognitive dimensions. It alone holds the
+        authority to terminate the cognitive loop.</p>
+
+      <h2>6. The Paradox of Quotas: Deep vs. Agile Contemplation</h2>
+      <p>The system recognizes two states of cognitive flow:</p>
+      <p><strong>Agile Reasoning:</strong> Favored for straightforward obstacles, where the Controller can converge upon
+        a solution quickly.</p>
+      <p><strong>Deep Contemplation:</strong> Introduces the Paradox of Quotas. In this mode, the Controller is
+        forbidden from terminating the loop early. It must visit every cognitive dimension a minimum number of times. By
+        legally forbidding early termination, the system shatters the AI's internal confidence and forces it to explore
+        uncharted territories of innovation.</p>
+
+      <h2>7. The Immutable Chronicle: Radical Transparency of Thought</h2>
+      <p>Obsidian demands Radical Transparency. Every question, argument, and navigational judgment is recorded in an
+        immutable "Cognitive Chronicle." This transforms the AI from a black box into an accountable intellectual
+        partner. Human operators can observe the phylogenetic tree of the machine's thought process and even "fork" the
+        contemplation from specific logical branches.</p>
+
+      <h2>8. Conclusion: From Computation to Contemplation</h2>
+      <p>The Obsidian Thinking Machine marks the evolution from artificial generation to artificial contemplation. By
+        rejecting the linear prompt, we reject the stochastic parrot. The future of AGI lies not in a single brain that
+        answers instantly, but in engineered societies of specialized minds forced to debate, reflect, and wonder their
+        way through complex problems.</p>
+    </div>
+
+    <section style="margin-top: 8rem;">
+      <h3
+        style="font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); margin-bottom: 2rem;">
+        More from the blog</h3>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+        <a href="autonomous-agents-safety.html"
+          style="text-decoration: none; display: block; background: var(--bg1); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem; transition: all 0.2s;">
+          <span
+            style="font-family: var(--mono); font-size: 9px; color: var(--accent); text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 8px;">Memory Architecture</span>
+          <h4 style="font-family: var(--serif); font-size: 17px; color: var(--text); line-height: 1.4; margin: 0;">The
+            Associative Cognitive Memory System (ACMS)</h4>
+        </a>
+        <a href="cognitive-spatial-fabric.html"
+          style="text-decoration: none; display: block; background: var(--bg1); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem; transition: all 0.2s;">
+          <span
+            style="font-family: var(--mono); font-size: 9px; color: var(--accent); text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 8px;">Spatial Intelligence</span>
+          <h4 style="font-family: var(--serif); font-size: 17px; color: var(--text); line-height: 1.4; margin: 0;">The
+            Cognitive Spatial Fabric (CSF)</h4>
+        </a>
+      </div>
+    </section>
+
+    <footer class="post-footer">
+      <span class="footer-label">Share this essay</span>
+      <div class="share-row">
+        <div class="share-btn">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+            <path
+              d="M12.67 1H14l-2.91 3.32L14.43 9h-2.68L9.65 6.24 7.25 9H5.92l3.1-3.54L5.92 1h2.75l2.13 2.81L12.67 1zm-.47 7.2h.74L7.84 1.76h-.79l5.15 6.44z" />
+          </svg>
+        </div>
+        <div class="share-btn">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+            <path
+              d="M15 8a7 7 0 10-8.24 6.91V9.9h-2.5V8h2.5V6.55c0-2.47 1.48-3.84 3.73-3.84 1.08 0 2.2.19 2.2.19v2.42h-1.24c-1.23 0-1.61.76-1.61 1.54V8h2.72l-.44 1.91h-2.28v5.01A7 7 0 0015 8z" />
+          </svg>
+        </div>
+        <div class="share-btn">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+            <path
+              d="M8 0a8 8 0 100 16A8 8 0 008 0zM5.5 12h-2V6h2v6zm-1-7a1 1 0 110-2 1 1 0 010 2zm9 7h-2V9.3c0-1.1-.4-1.8-1.4-1.8-1 0-1.6.7-1.8 1.4l-.1.6v2.5h-2V6h2v.8c.3-.5.9-1.2 2-1.2 1.4 0 2.4.9 2.4 3V12z" />
+          </svg>
+        </div>
+      </div>
+    </footer>
+  </article>
+
+  <!-- Profile Picture Modal -->
+  <div class="profile-modal-backdrop" id="profile-modal-backdrop">
+    <div class="profile-modal">
+      <div class="p-modal-header">
+        <div class="p-modal-title">Gift Braimah</div>
+        <button class="p-modal-close" id="profile-modal-close">&times;</button>
+      </div>
+      <div class="p-modal-body">
+        <img src="https://i.ibb.co/JRV0C3r5/Snapchat-1213438513-01.jpg" alt="Gift Braimah Full Photo">
+      </div>
+    </div>
+  </div>
+
+  <!-- Hire Modal -->
+  <div class="profile-modal-backdrop" id="hire-modal-backdrop">
+    <div class="profile-modal" style="width: min(440px, 92vw);">
+      <div class="p-modal-header">
+        <div class="p-modal-title">Let's Connect</div>
+        <button class="p-modal-close" id="hire-modal-close">&times;</button>
+      </div>
+      <div class="p-modal-body" style="padding: 2.5rem 2rem; text-align: center;">
+        <p style="color: var(--text2); font-size: 16px; margin-bottom: 2rem; line-height: 1.6; font-family: var(--serif);">
+          For high-fidelity engineering or AI architecture inquiries, please reach out via <strong>Email</strong> or <strong>WhatsApp</strong>. These are my primary contact channels.
+        </p>
+        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+          <a href="mailto:braimahgifted@gmail.com" class="hire-modal-link">
+            <svg width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M2 4L8 8L14 4M2 12H14V4H2V12Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>
+            braimahgifted@gmail.com
+          </a>
+          <a href="https://wa.me/2349113083786" target="_blank" class="hire-modal-link" style="background: rgba(37, 211, 102, 0.1); border-color: rgba(37, 211, 102, 0.2); color: #25D366;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+            Chat on WhatsApp
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .hire-modal-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 1.25rem;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      color: var(--text);
+      text-decoration: none;
+      font-family: var(--sans);
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+    .hire-modal-link:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+  </style>
+  <script>
+    // Profile Modal Logic
+    const pModal = document.getElementById('profile-modal-backdrop');
+    const pTrigger = document.getElementById('profile-trigger');
+    const pClose = document.getElementById('profile-modal-close');
+
+    if (pTrigger) {
+      pTrigger.addEventListener('click', () => pModal.classList.add('open'));
+    }
+    if (pClose) {
+      pClose.addEventListener('click', () => pModal.classList.remove('open'));
+    }
+    if (pModal) {
+      pModal.addEventListener('click', (e) => {
+        if (e.target === pModal) pModal.classList.remove('open');
+      });
+    }
+  
+    
+
+    // Hire Modal Logic
+    const hModal = document.getElementById('hire-modal-backdrop');
+    const hClose = document.getElementById('hire-modal-close');
+    window.openHire = () => hModal.classList.add('open');
+    if (hClose) hClose.addEventListener('click', () => hModal.classList.remove('open'));
+    if (hModal) hModal.addEventListener('click', (e) => { if (e.target === hModal) hModal.classList.remove('open'); });
+
+  </script>
+
+  
+
+</body>
+
+</html>
