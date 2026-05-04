@@ -940,28 +940,28 @@
     }
 
     function delay(seg) {
-      if (!seg) return 60;
+      if (!seg) return 30;
 
-      // Paragraph Transitions: Deep pauses (1s - 1.5s)
-      if (seg.type === 'break') return 1000 + Math.random() * 500;
+      // Paragraph Transitions: Pauses (400ms - 600ms)
+      if (seg.type === 'break') return 400 + Math.random() * 200;
 
-      if (seg.type === 'newline') return 65;
+      if (seg.type === 'newline') return 30;
 
       if (seg.type === 'char') {
         const c = seg.ch;
 
-        // Thoughtful Pauses: End of sentences (700ms - 1200ms)
-        if (/[.?!]/.test(c)) return 700 + Math.random() * 500;
+        // Thoughtful Pauses: End of sentences (300ms - 500ms)
+        if (/[.?!]/.test(c)) return 300 + Math.random() * 200;
 
-        // Rhythmic Breaks: Mid-sentence pauses (350ms - 700ms)
-        if (/[,;:\-—]/.test(c)) return 350 + Math.random() * 350;
+        // Rhythmic Breaks: Mid-sentence pauses (150ms - 300ms)
+        if (/[,;:\-—]/.test(c)) return 150 + Math.random() * 150;
 
         // Spaces: Slight pause
-        if (c === ' ') return 50 + Math.random() * 50;
+        if (c === ' ') return 20 + Math.random() * 20;
       }
 
-      // Varied Character Speed: Base jitter (40ms - 100ms)
-      return 40 + Math.random() * 60;
+      // Varied Character Speed: Base jitter (15ms - 40ms)
+      return 15 + Math.random() * 25;
     }
 
     function onDone() {
@@ -1013,13 +1013,13 @@
 
     setTimeout(() => {
       render();
-      setTimeout(typeNext, 700);
+      setTimeout(typeNext, 400);
 
-      // Show button after 25 seconds into the site (if not already visible)
+      // Show button after 12 seconds into the site (if not already visible)
       setTimeout(() => {
         const btn = document.getElementById('delve-btn');
         if (btn) btn.classList.add('visible');
-      }, 24650);
+      }, 12000);
     }, 350);
 
     // Button Click Logic: Skip or Navigate
