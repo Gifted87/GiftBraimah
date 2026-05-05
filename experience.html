@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Experience Matrix — Gift Braimah</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+  <style>
+    /* ═══════════════════════════ TOKENS ═══════════════════════════ */
+    :root {
+      --bg: #111009;
+      --bg1: #181512;
+      --bg2: #201C18;
+      --bg3: #2A2521;
+      --accent: #D97757;
+      --text: #F5AD8C;
+      --text2: #C49070;
+      --muted: #7A6E66;
+      --muted2: #3E3830;
+      --border: rgba(245, 173, 140, 0.09);
+      --border2: rgba(245, 173, 140, 0.18);
+      --sans: 'DM Sans', sans-serif;
+      --serif: 'Lora', Georgia, serif;
+      --mono: 'Share Tech Mono', monospace;
+    }
+
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      height: 100%;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* ─── Ambient atmosphere ─── */
+    .atmosphere {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .atmosphere::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 55% at 50% 50%, rgba(217, 119, 87, 0.06) 0%, transparent 65%),
+        radial-gradient(ellipse 40% 35% at 15% 20%, rgba(91, 155, 213, 0.04) 0%, transparent 55%),
+        radial-gradient(ellipse 35% 30% at 85% 80%, rgba(109, 184, 138, 0.03) 0%, transparent 50%);
+    }
+
+    /* Fine grid */
+    .atmosphere::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(245, 173, 140, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(245, 173, 140, 0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    /* ─── Topbar ─── */
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 50;
+      height: 54px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2.5rem;
+      border-bottom: 1px solid var(--border);
+      background: rgba(17, 16, 9, 0.85);
+      backdrop-filter: blur(16px);
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-img {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--accent);
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .logo-img:hover {
+      transform: scale(1.08);
+    }
+
+    .topbar-name {
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .topbar-sep {
+      width: 1px;
+      height: 16px;
+      background: var(--muted2);
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .nav-link {
+      font-size: 13px;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.15s;
+      cursor: pointer;
+    }
+
+    .nav-link:hover, .nav-link.active {
+      color: var(--text);
+    }
+
+    .hire-btn {
+      font-family: var(--sans);
+      font-size: 12px;
+      font-weight: 500;
+      color: #1A0E08;
+      background: var(--accent);
+      border: none;
+      border-radius: 8px;
+      padding: 7px 16px;
+      cursor: pointer;
+      transition: all 0.18s;
+      box-shadow: 0 2px 12px rgba(217, 119, 87, 0.3);
+    }
+
+    .hire-btn:hover {
+      box-shadow: 0 4px 20px rgba(217, 119, 87, 0.45);
+      transform: translateY(-1px);
+    }
+
+    /* ─── Hamburger ─── */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 36px;
+      height: 36px;
+      background: none;
+      border: 1px solid var(--border2);
+      border-radius: 8px;
+      cursor: pointer;
+      padding: 8px;
+      transition: border-color 0.2s;
+    }
+
+    .hamburger:hover {
+      border-color: var(--accent);
+    }
+
+    .hamburger span {
+      display: block;
+      height: 1.5px;
+      background: var(--text);
+      border-radius: 2px;
+      transition: all 0.25s ease;
+      transform-origin: center;
+    }
+
+    .hamburger.open span:nth-child(1) {
+      transform: translateY(6.5px) rotate(45deg);
+    }
+
+    .hamburger.open span:nth-child(2) {
+      opacity: 0;
+      transform: scaleX(0);
+    }
+
+    .hamburger.open span:nth-child(3) {
+      transform: translateY(-6.5px) rotate(-45deg);
+    }
+
+    /* ─── Mobile Drawer ─── */
+    .mobile-drawer {
+      display: none;
+      position: fixed;
+      top: 54px;
+      left: 0;
+      right: 0;
+      z-index: 49;
+      background: rgba(17, 16, 9, 0.97);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      flex-direction: column;
+      padding: 1.25rem 1.5rem 1.5rem;
+      gap: 0.25rem;
+      transform: translateY(-10px);
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.25s ease;
+    }
+
+    .mobile-drawer.open {
+      display: flex;
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .drawer-link {
+      font-family: var(--sans);
+      font-size: 15px;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 0.85rem 0;
+      border-bottom: 1px solid var(--border);
+      transition: color 0.15s;
+    }
+
+    .drawer-link:last-child {
+      border-bottom: none;
+    }
+
+    .drawer-link:hover,
+    .drawer-link.active {
+      color: var(--text);
+    }
+
+    .drawer-hire {
+      margin-top: 0.75rem;
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 500;
+      color: #1A0E08;
+      background: var(--accent);
+      border: none;
+      border-radius: 10px;
+      padding: 12px 20px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.18s;
+      box-shadow: 0 2px 12px rgba(217, 119, 87, 0.3);
+    }
+
+    /* ─── Page header ─── */
+    .page-header {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      margin-top: 100px;
+      margin-bottom: 3.5rem;
+      animation: fadeUp 0.7s ease both;
+    }
+
+    .page-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+
+    .page-title {
+      font-family: var(--serif);
+      font-size: clamp(28px, 5vw, 42px);
+      font-weight: 400;
+      color: var(--text);
+      line-height: 1.2;
+      margin-bottom: 0.4rem;
+    }
+
+    .page-sub {
+      font-size: 14px;
+      color: var(--muted);
+      max-width: 480px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    /* ─── Tree Progression Layout ─── */
+    .tree-container {
+      position: relative;
+      z-index: 1;
+      max-width: 1000px;
+      margin: 0 auto 100px;
+      padding: 0 20px;
+    }
+
+    .tree-line {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--border2);
+      transform: translateX(-50%);
+      z-index: 0;
+    }
+    
+    .tree-line-glow {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      width: 2px;
+      height: 100px; /* will animate */
+      background: var(--accent);
+      transform: translateX(-50%);
+      box-shadow: 0 0 15px var(--accent);
+      z-index: 1;
+      animation: lineGlowDown 3s ease-in-out infinite alternate;
+    }
+
+    .tree-node {
+      position: relative;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 4rem;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.7s ease both;
+    }
+
+    .tree-node:nth-child(1) { animation-delay: 0.2s; }
+    .tree-node:nth-child(2) { animation-delay: 0.4s; }
+    .tree-node:nth-child(3) { animation-delay: 0.6s; }
+
+    .node-dot {
+      position: absolute;
+      left: 50%;
+      top: 24px;
+      transform: translate(-50%, -50%);
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--bg);
+      border: 2px solid var(--accent);
+      z-index: 2;
+      box-shadow: 0 0 10px rgba(217, 119, 87, 0.5);
+      transition: all 0.3s ease;
+    }
+    
+    .tree-node:hover .node-dot {
+      background: var(--accent);
+      box-shadow: 0 0 20px var(--accent);
+      transform: translate(-50%, -50%) scale(1.2);
+    }
+
+    .node-content-wrapper {
+      width: 50%;
+      display: flex;
+      position: relative;
+    }
+
+    .node-left {
+      justify-content: flex-end;
+      padding-right: 40px;
+    }
+
+    .node-right {
+      justify-content: flex-start;
+      padding-left: 40px;
+      margin-left: 50%;
+    }
+
+    .node-card {
+      width: 100%;
+      max-width: 420px;
+      background: rgba(32, 28, 24, 0.4);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .node-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(245, 173, 140, 0.3), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .tree-node:hover .node-card {
+      border-color: var(--border2);
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .tree-node:hover .node-card::before {
+      opacity: 1;
+    }
+
+    .node-date {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      margin-bottom: 0.5rem;
+      display: inline-block;
+    }
+
+    .node-title {
+      font-family: var(--serif);
+      font-size: 20px;
+      color: var(--text);
+      margin-bottom: 0.25rem;
+    }
+
+    .node-company {
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text2);
+      margin-bottom: 1rem;
+    }
+
+    .node-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* ─── Animations ─── */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes lineGlowDown {
+      0% {
+        top: 0;
+        height: 100px;
+        opacity: 0.3;
+      }
+      50% {
+        opacity: 1;
+      }
+      100% {
+        top: calc(100% - 100px);
+        height: 100px;
+        opacity: 0.3;
+      }
+    }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 768px) {
+      .topbar { padding: 0 1.25rem; }
+      .hamburger { display: flex; }
+      .topbar-right .nav-link, .topbar-right .hire-btn { display: none; }
+      
+      .tree-line {
+        left: 20px;
+        transform: none;
+      }
+      .tree-line-glow {
+        left: 20px;
+        transform: none;
+      }
+
+      .node-dot {
+        left: 20px;
+        transform: translate(-50%, -50%);
+      }
+
+      .tree-node:hover .node-dot {
+        transform: translate(-50%, -50%) scale(1.2);
+      }
+
+      .node-content-wrapper {
+        width: 100%;
+        padding-left: 50px !important;
+        padding-right: 0 !important;
+        margin-left: 0 !important;
+        justify-content: flex-start;
+      }
+
+      .node-card {
+        max-width: 100%;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+  <div class="atmosphere"></div>
+
+  <!-- ── Topbar ── -->
+  <nav class="topbar">
+    <div class="topbar-left">
+      <img src="https://i.ibb.co/JRV0C3r5/Snapchat-1213438513-01.jpg" alt="Gift Braimah" class="logo-img">
+      <a href="index.html" class="topbar-name">Gift Braimah</a>
+      <span class="topbar-sep"></span>
+    </div>
+    <div class="topbar-right">
+      <a class="nav-link" href="about.html">About</a>
+      <a class="nav-link active" href="experience.html">Experience</a>
+      <a class="nav-link" href="portfolio.html">Work</a>
+      <a class="nav-link" href="writing.html">Writing</a>
+      <button class="hire-btn" onclick="openHire()">Hire Me</button>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ── Mobile Drawer ── -->
+  <div class="mobile-drawer" id="mobile-drawer">
+    <a class="drawer-link" href="about.html">About</a>
+    <a class="drawer-link active" href="experience.html">Experience</a>
+    <a class="drawer-link" href="portfolio.html">Work</a>
+    <a class="drawer-link" href="writing.html">Writing</a>
+    <button class="drawer-hire" onclick="openHire()">Hire Me</button>
+  </div>
+
+  <main>
+    <div class="page-header">
+      <div class="page-label">Matrix</div>
+      <h1 class="page-title">Progression</h1>
+      <p class="page-sub">Tracing the evolution of architectures, engineering, and cognitive research.</p>
+    </div>
+
+    <div class="tree-container">
+      <div class="tree-line"></div>
+      <div class="tree-line-glow"></div>
+
+      <!-- Node 1: Solo Researcher -->
+      <div class="tree-node">
+        <div class="node-dot"></div>
+        <div class="node-content-wrapper node-left">
+          <div class="node-card">
+            <div class="node-date">OCT 2024 - PRESENT</div>
+            <h3 class="node-title">AI/ML Research & Development</h3>
+            <div class="node-company">Solo Researcher</div>
+            <p class="node-desc">
+              Independent research and development focused on bridging the gap between current Large Language Models (LLMs) and Sovereign Artificial General Intelligence (AGI). Operating at the intersection of bare-metal computing, complex systems engineering, and cognitive science, my core thesis is that Super-Intelligence is an architectural problem, not merely a model-scaling one.<br><br>
+              I conceptualized and built Ovan, an autonomous software synthesis engine that takes a plain-language prompt and generates production-grade, security-hardened backends end-to-end, without human supervision. To build it I had to design six sophisticated systems from scratch: ACN (a fractal multi-agent network for recursive code generation. it autonomously synthesize complex, security-hardened backend systems from scratch with a single prompt or product description.), ACMS (a neuro-inspired associative memory system built on Elixir/BEAM with soreading activation and hebbian learning), and Obsidian (a thinking machine designed to simulate and elevate complex human cognitive processes in machines. I engineered it to introduce Machine Creativity through Forced Lateral Contemplation) and three more systems.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Node 2: Freelancer -->
+      <div class="tree-node">
+        <div class="node-dot"></div>
+        <div class="node-content-wrapper node-right">
+          <div class="node-card">
+            <div class="node-date">JAN 2023 - NOV 2025</div>
+            <h3 class="node-title">Full-Stack Architecture & Dev</h3>
+            <div class="node-company">Freelancer</div>
+            <p class="node-desc">
+              Built end-to-end web and mobile applications for diverse clients (eCommerce, Education, Services), managing the lifecycle from concept to deployment. Architected and built an AI-powered engine automating complex research, writing, and study tasks, featuring real-time document generation (PDF, Word, PPT). Built a complete, enterprise-grade Property Management System (PMS) built natively within the Frappe Framework. Built a trading bot that integrates with AI to perform complex market analysis.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Node 3: Embedded Systems -->
+      <div class="tree-node">
+        <div class="node-dot"></div>
+        <div class="node-content-wrapper node-left">
+          <div class="node-card">
+            <div class="node-date">JUN 2021 - DEC 2022</div>
+            <h3 class="node-title">Embedded Systems Engineer</h3>
+            <div class="node-company">TEGASSEN NIGERIA LTD</div>
+            <p class="node-desc">
+              Designed and deployed smart security systems, church alarm systems, and smart home/business management systems.
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    // Hamburger menu toggle
+    const hamburger = document.getElementById('hamburger');
+    const mobileDrawer = document.getElementById('mobile-drawer');
+
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('open');
+      mobileDrawer.classList.toggle('open');
+    });
+
+    function openHire() {
+      // Stub for hire modal if we need it here, or just redirect/mailto
+      window.location.href = "mailto:braimahgifted@gmail.com";
+    }
+  </script>
+</body>
+</html>
