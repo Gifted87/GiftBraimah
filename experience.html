@@ -69,7 +69,9 @@
     /* ─── Topbar ─── */
     .topbar {
       position: fixed;
-      top: 0; left: 0; right: 0;
+      top: 0;
+      left: 0;
+      right: 0;
       z-index: 50;
       height: 54px;
       display: flex;
@@ -82,39 +84,66 @@
     }
 
     .topbar-left {
-      display: flex; align-items: center; gap: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
 
     .logo-img {
-      width: 32px; height: 32px;
-      border-radius: 50%; object-fit: cover;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
       border: 2px solid var(--accent);
-      cursor: pointer; transition: transform 0.2s ease;
+      cursor: pointer;
+      transition: transform 0.2s ease;
     }
-    .logo-img:hover { transform: scale(1.08); }
+
+    .logo-img:hover {
+      transform: scale(1.08);
+    }
 
     .topbar-name {
-      font-family: var(--sans); font-size: 14px; font-weight: 500;
-      color: var(--text); text-decoration: none;
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+      text-decoration: none;
     }
 
     .topbar-right {
-      display: flex; align-items: center; gap: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
     }
 
     .nav-link {
-      font-size: 13px; color: var(--muted); text-decoration: none;
-      transition: color 0.15s; cursor: pointer;
+      font-size: 13px;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.15s;
+      cursor: pointer;
     }
-    .nav-link:hover, .nav-link.active { color: var(--text); }
+
+    .nav-link:hover,
+    .nav-link.active {
+      color: var(--text);
+    }
 
     .hire-btn {
-      font-family: var(--sans); font-size: 12px; font-weight: 500;
-      color: #1A0E08; background: var(--accent);
-      border: none; border-radius: 8px; padding: 7px 16px;
-      cursor: pointer; transition: all 0.18s;
+      font-family: var(--sans);
+      font-size: 12px;
+      font-weight: 500;
+      color: #1A0E08;
+      background: var(--accent);
+      border: none;
+      border-radius: 8px;
+      padding: 7px 16px;
+      cursor: pointer;
+      transition: all 0.18s;
       box-shadow: 0 2px 12px rgba(217, 119, 87, 0.3);
     }
+
     .hire-btn:hover {
       box-shadow: 0 4px 20px rgba(217, 119, 87, 0.45);
       transform: translateY(-1px);
@@ -122,147 +151,337 @@
 
     /* ─── Hamburger ─── */
     .hamburger {
-      display: none; flex-direction: column; justify-content: center;
-      gap: 5px; width: 36px; height: 36px; background: none;
-      border: 1px solid var(--border2); border-radius: 8px;
-      cursor: pointer; padding: 8px; transition: border-color 0.2s;
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 36px;
+      height: 36px;
+      background: none;
+      border: 1px solid var(--border2);
+      border-radius: 8px;
+      cursor: pointer;
+      padding: 8px;
+      transition: border-color 0.2s;
     }
-    .hamburger:hover { border-color: var(--accent); }
+
+    .hamburger:hover {
+      border-color: var(--accent);
+    }
+
     .hamburger span {
-      display: block; height: 1.5px; background: var(--text);
-      border-radius: 2px; transition: all 0.25s ease; transform-origin: center;
+      display: block;
+      height: 1.5px;
+      background: var(--text);
+      border-radius: 2px;
+      transition: all 0.25s ease;
+      transform-origin: center;
     }
-    .hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
-    .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
-    .hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    .hamburger.open span:nth-child(1) {
+      transform: translateY(6.5px) rotate(45deg);
+    }
+
+    .hamburger.open span:nth-child(2) {
+      opacity: 0;
+      transform: scaleX(0);
+    }
+
+    .hamburger.open span:nth-child(3) {
+      transform: translateY(-6.5px) rotate(-45deg);
+    }
 
     /* ─── Mobile Drawer ─── */
     .mobile-drawer {
-      display: none; position: fixed; top: 54px; left: 0; right: 0;
-      z-index: 49; background: rgba(12, 11, 10, 0.97); backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--border); flex-direction: column;
-      padding: 1.25rem 1.5rem 1.5rem; gap: 0.25rem;
-      transform: translateY(-10px); opacity: 0; pointer-events: none;
+      display: none;
+      position: fixed;
+      top: 54px;
+      left: 0;
+      right: 0;
+      z-index: 49;
+      background: rgba(12, 11, 10, 0.97);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      flex-direction: column;
+      padding: 1.25rem 1.5rem 1.5rem;
+      gap: 0.25rem;
+      transform: translateY(-10px);
+      opacity: 0;
+      pointer-events: none;
       transition: all 0.25s ease;
     }
+
     .mobile-drawer.open {
-      display: flex; transform: translateY(0); opacity: 1; pointer-events: all;
+      display: flex;
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: all;
     }
+
     .drawer-link {
-      font-family: var(--sans); font-size: 15px; color: var(--muted);
-      text-decoration: none; padding: 0.85rem 0;
-      border-bottom: 1px solid var(--border); transition: color 0.15s;
+      font-family: var(--sans);
+      font-size: 15px;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 0.85rem 0;
+      border-bottom: 1px solid var(--border);
+      transition: color 0.15s;
     }
-    .drawer-link:last-child { border-bottom: none; }
-    .drawer-link:hover, .drawer-link.active { color: var(--text); }
+
+    .drawer-link:last-child {
+      border-bottom: none;
+    }
+
+    .drawer-link:hover,
+    .drawer-link.active {
+      color: var(--text);
+    }
+
     .drawer-hire {
-      margin-top: 0.75rem; font-family: var(--sans); font-size: 14px; font-weight: 500;
-      color: #1A0E08; background: var(--accent); border: none; border-radius: 10px;
-      padding: 12px 20px; cursor: pointer; text-align: center;
-      transition: all 0.18s; box-shadow: 0 2px 12px rgba(217, 119, 87, 0.3);
+      margin-top: 0.75rem;
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 500;
+      color: #1A0E08;
+      background: var(--accent);
+      border: none;
+      border-radius: 10px;
+      padding: 12px 20px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.18s;
+      box-shadow: 0 2px 12px rgba(217, 119, 87, 0.3);
     }
 
     /* ─── Page header ─── */
-    main { position: relative; z-index: 1; padding-top: 120px; padding-bottom: 100px; }
-    
+    main {
+      position: relative;
+      z-index: 1;
+      padding-top: 120px;
+      padding-bottom: 100px;
+    }
+
     .sys-header {
-      text-align: center; margin-bottom: 4rem;
+      text-align: center;
+      margin-bottom: 4rem;
       animation: bootUp 1s cubic-bezier(0.16, 1, 0.3, 1) both;
     }
+
     .sys-label {
-      font-family: var(--mono); font-size: 10px; letter-spacing: 0.3em;
-      text-transform: uppercase; color: var(--accent); margin-bottom: 1rem;
-      display: inline-block; border: 1px solid rgba(217, 119, 87, 0.3);
-      padding: 4px 12px; background: rgba(217, 119, 87, 0.05);
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      display: inline-block;
+      border: 1px solid rgba(217, 119, 87, 0.3);
+      padding: 4px 12px;
+      background: rgba(217, 119, 87, 0.05);
     }
+
     .sys-title {
-      font-family: var(--serif); font-size: clamp(32px, 6vw, 54px);
-      font-weight: 400; color: var(--text); line-height: 1.1; margin-bottom: 1rem;
+      font-family: var(--serif);
+      font-size: clamp(32px, 6vw, 54px);
+      font-weight: 400;
+      color: var(--text);
+      line-height: 1.1;
+      margin-bottom: 1rem;
     }
+
     .sys-sub {
-      font-family: var(--mono); font-size: 12px; color: var(--muted);
-      max-width: 500px; margin: 0 auto; line-height: 1.8; letter-spacing: 0.05em;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+      max-width: 500px;
+      margin: 0 auto;
+      line-height: 1.8;
+      letter-spacing: 0.05em;
     }
 
     /* ─── Architecture Node Map ─── */
     .arch-container {
-      position: relative; max-width: 1000px; margin: 0 auto; padding: 0 20px;
+      position: relative;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 20px;
     }
 
     /* Central Axis */
     .arch-axis {
-      position: absolute; left: 50%; top: 0; bottom: 0; width: 1px;
-      background: var(--border2); transform: translateX(-50%); z-index: 0;
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: var(--border2);
+      transform: translateX(-50%);
+      z-index: 0;
     }
+
     .arch-axis-glow {
-      position: absolute; left: 50%; top: 0; width: 1px; height: 0;
-      background: var(--accent); transform: translateX(-50%); z-index: 1;
+      position: absolute;
+      left: 50%;
+      top: 0;
+      width: 1px;
+      height: 0;
+      background: var(--accent);
+      transform: translateX(-50%);
+      z-index: 1;
       box-shadow: 0 0 12px var(--accent), 0 0 24px var(--accent);
       animation: drawAxis 2.5s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.5s;
     }
 
     /* Nodes */
     .arch-node {
-      position: relative; width: 100%; display: flex; align-items: flex-start;
-      margin-bottom: 80px; z-index: 2; opacity: 0;
+      position: relative;
+      width: 100%;
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 80px;
+      z-index: 2;
+      opacity: 0;
       animation: fadeNodeIn 0.6s ease forwards;
     }
-    .arch-node:nth-child(3) { animation-delay: 1.2s; }
-    .arch-node:nth-child(4) { animation-delay: 1.8s; }
-    .arch-node:nth-child(5) { animation-delay: 2.4s; }
+
+    .arch-node:nth-child(3) {
+      animation-delay: 1.2s;
+    }
+
+    .arch-node:nth-child(4) {
+      animation-delay: 1.8s;
+    }
+
+    .arch-node:nth-child(5) {
+      animation-delay: 2.4s;
+    }
 
     /* Connecting Traces */
     .trace-line {
-      position: absolute; top: 30px; height: 1px; background: var(--border2); z-index: 1;
+      position: absolute;
+      top: 30px;
+      height: 1px;
+      background: var(--border2);
+      z-index: 1;
     }
+
     .trace-line-glow {
-      position: absolute; top: 30px; height: 1px; width: 0;
-      background: var(--accent); z-index: 2;
+      position: absolute;
+      top: 30px;
+      height: 1px;
+      width: 0;
+      background: var(--accent);
+      z-index: 2;
       box-shadow: 0 0 8px var(--accent);
     }
-    .arch-node.left .trace-line { right: 50%; left: calc(50% - 40px); }
-    .arch-node.right .trace-line { left: 50%; right: calc(50% - 40px); }
-    
-    .arch-node.left .trace-line-glow { right: 50%; animation: drawTraceLeft 0.5s ease forwards; }
-    .arch-node.right .trace-line-glow { left: 50%; animation: drawTraceRight 0.5s ease forwards; }
 
-    .arch-node:nth-child(3) .trace-line-glow { animation-delay: 1.4s; }
-    .arch-node:nth-child(4) .trace-line-glow { animation-delay: 2.0s; }
-    .arch-node:nth-child(5) .trace-line-glow { animation-delay: 2.6s; }
+    .arch-node.left .trace-line {
+      right: 50%;
+      left: calc(50% - 40px);
+    }
+
+    .arch-node.right .trace-line {
+      left: 50%;
+      right: calc(50% - 40px);
+    }
+
+    .arch-node.left .trace-line-glow {
+      right: 50%;
+      animation: drawTraceLeft 0.5s ease forwards;
+    }
+
+    .arch-node.right .trace-line-glow {
+      left: 50%;
+      animation: drawTraceRight 0.5s ease forwards;
+    }
+
+    .arch-node:nth-child(3) .trace-line-glow {
+      animation-delay: 1.4s;
+    }
+
+    .arch-node:nth-child(4) .trace-line-glow {
+      animation-delay: 2.0s;
+    }
+
+    .arch-node:nth-child(5) .trace-line-glow {
+      animation-delay: 2.6s;
+    }
 
     /* Core Joint */
     .core-joint {
-      position: absolute; left: 50%; top: 30px; transform: translate(-50%, -50%);
-      width: 10px; height: 10px; border-radius: 2px;
-      background: var(--bg); border: 1px solid var(--border-lit); z-index: 3;
-      transform-origin: center; transition: all 0.3s;
+      position: absolute;
+      left: 50%;
+      top: 30px;
+      transform: translate(-50%, -50%);
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      background: var(--bg);
+      border: 1px solid var(--border-lit);
+      z-index: 3;
+      transform-origin: center;
+      transition: all 0.3s;
     }
+
     .arch-node:hover .core-joint {
-      background: var(--accent); border-color: var(--accent);
-      box-shadow: 0 0 15px var(--accent); transform: translate(-50%, -50%) rotate(45deg);
+      background: var(--accent);
+      border-color: var(--accent);
+      box-shadow: 0 0 15px var(--accent);
+      transform: translate(-50%, -50%) rotate(45deg);
     }
 
     /* Layout align */
-    .node-wrap { width: 50%; display: flex; position: relative; }
-    .arch-node.left .node-wrap { justify-content: flex-end; padding-right: 40px; }
-    .arch-node.right .node-wrap { margin-left: 50%; justify-content: flex-start; padding-left: 40px; }
+    .node-wrap {
+      width: 50%;
+      display: flex;
+      position: relative;
+    }
+
+    .arch-node.left .node-wrap {
+      justify-content: flex-end;
+      padding-right: 40px;
+    }
+
+    .arch-node.right .node-wrap {
+      margin-left: 50%;
+      justify-content: flex-start;
+      padding-left: 40px;
+    }
 
     /* Data Block */
     .data-block {
-      width: 100%; max-width: 440px;
+      width: 100%;
+      max-width: 440px;
       background: rgba(20, 18, 16, 0.7);
       border: 1px solid var(--border);
-      padding: 0; backdrop-filter: blur(12px);
-      position: relative; transition: all 0.3s ease;
+      padding: 0;
+      backdrop-filter: blur(12px);
+      position: relative;
+      transition: all 0.3s ease;
     }
+
     .data-block::before {
-      content: ''; position: absolute; top: -1px; left: -1px; width: 0; height: 1px;
-      background: var(--accent); transition: width 0.4s ease;
+      content: '';
+      position: absolute;
+      top: -1px;
+      left: -1px;
+      width: 0;
+      height: 1px;
+      background: var(--accent);
+      transition: width 0.4s ease;
     }
+
     .data-block::after {
-      content: ''; position: absolute; bottom: 0; right: 0; width: 8px; height: 8px;
-      border-bottom: 1px solid var(--accent); border-right: 1px solid var(--accent);
-      opacity: 0; transition: opacity 0.3s ease;
+      content: '';
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 8px;
+      height: 8px;
+      border-bottom: 1px solid var(--accent);
+      border-right: 1px solid var(--accent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
     }
 
     .arch-node:hover .data-block {
@@ -271,100 +490,263 @@
       box-shadow: 0 12px 40px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(217, 119, 87, 0.1);
       transform: translateY(-2px);
     }
-    .arch-node:hover .data-block::before { width: 100px; }
-    .arch-node:hover .data-block::after { opacity: 1; }
+
+    .arch-node:hover .data-block::before {
+      width: 100px;
+    }
+
+    .arch-node:hover .data-block::after {
+      opacity: 1;
+    }
 
     /* Block Header */
     .block-header {
-      padding: 12px 20px; border-bottom: 1px solid var(--border);
-      display: flex; justify-content: space-between; align-items: center;
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       background: rgba(0, 0, 0, 0.2);
     }
-    .sys-id { font-family: var(--mono); font-size: 10px; color: var(--accent); letter-spacing: 0.1em; }
-    .sys-status { 
-      font-family: var(--mono); font-size: 9px; color: var(--success, #6DB88A); 
-      display: flex; align-items: center; gap: 6px;
+
+    .sys-id {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--accent);
+      letter-spacing: 0.1em;
     }
+
+    .sys-status {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--success, #6DB88A);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
     .sys-status::before {
-      content: ''; display: block; width: 4px; height: 4px; border-radius: 50%;
-      background: currentColor; box-shadow: 0 0 6px currentColor;
+      content: '';
+      display: block;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: currentColor;
+      box-shadow: 0 0 6px currentColor;
     }
 
     /* Block Body */
-    .block-body { padding: 24px 20px; }
+    .block-body {
+      padding: 24px 20px;
+    }
+
     .block-title {
-      font-family: var(--serif); font-size: 18px; color: var(--text);
-      margin-bottom: 4px; letter-spacing: 0.02em;
+      font-family: var(--serif);
+      font-size: 18px;
+      color: var(--text);
+      margin-bottom: 4px;
+      letter-spacing: 0.02em;
     }
+
     .block-org {
-      font-family: var(--mono); font-size: 11px; color: var(--muted);
-      letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 16px;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
     }
+
     .block-desc {
-      font-size: 13px; color: var(--text2); line-height: 1.7; opacity: 0.85;
+      font-size: 13px;
+      color: var(--text2);
+      line-height: 1.7;
+      opacity: 0.85;
+    }
+
+    .block-list {
+      list-style: none;
+      padding-left: 0;
+      margin-top: 10px;
+    }
+
+    .block-list li {
+      font-size: 13px;
+      color: var(--text2);
+      line-height: 1.7;
+      opacity: 0.85;
+      margin-bottom: 12px;
+      position: relative;
+      padding-left: 18px;
+    }
+
+    .block-list li:last-child {
+      margin-bottom: 0;
+    }
+
+    .block-list li::before {
+      content: '>';
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: var(--accent);
+      font-family: var(--mono);
+      font-weight: 600;
+    }
+
+    .block-list li strong {
+      color: var(--text);
     }
 
     /* Scanning laser effect on hover */
     .laser {
-      position: absolute; top: -20px; left: 0; right: 0; height: 20px;
+      position: absolute;
+      top: -20px;
+      left: 0;
+      right: 0;
+      height: 20px;
       background: linear-gradient(to bottom, transparent, rgba(217, 119, 87, 0.15));
       border-bottom: 1px solid rgba(217, 119, 87, 0.3);
-      opacity: 0; z-index: 10; pointer-events: none;
+      opacity: 0;
+      z-index: 10;
+      pointer-events: none;
     }
+
     .arch-node:hover .laser {
       animation: scanDown 2s ease infinite;
     }
 
     /* ─── Animations ─── */
     @keyframes bootUp {
-      from { opacity: 0; transform: scale(0.98) translateY(10px); filter: blur(4px); }
-      to { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
+      from {
+        opacity: 0;
+        transform: scale(0.98) translateY(10px);
+        filter: blur(4px);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+        filter: blur(0);
+      }
     }
+
     @keyframes drawAxis {
-      to { height: 100%; }
+      to {
+        height: 100%;
+      }
     }
+
     @keyframes fadeNodeIn {
-      from { opacity: 0; transform: translateY(15px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(15px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
+
     @keyframes drawTraceLeft {
-      from { width: 0; left: 50%; }
-      to { width: 40px; left: calc(50% - 40px); }
+      from {
+        width: 0;
+        left: 50%;
+      }
+
+      to {
+        width: 40px;
+        left: calc(50% - 40px);
+      }
     }
+
     @keyframes drawTraceRight {
-      from { width: 0; }
-      to { width: 40px; }
+      from {
+        width: 0;
+      }
+
+      to {
+        width: 40px;
+      }
     }
+
     @keyframes scanDown {
-      0% { top: 0; opacity: 1; }
-      80% { top: 100%; opacity: 1; }
-      100% { top: 100%; opacity: 0; }
+      0% {
+        top: 0;
+        opacity: 1;
+      }
+
+      80% {
+        top: 100%;
+        opacity: 1;
+      }
+
+      100% {
+        top: 100%;
+        opacity: 0;
+      }
     }
 
     /* ─── Responsive ─── */
     @media (max-width: 768px) {
-      .topbar { padding: 0 1.25rem; }
-      .hamburger { display: flex; }
-      .topbar-right .nav-link, .topbar-right .hire-btn { display: none; }
-      
-      .arch-axis, .arch-axis-glow { left: 20px; transform: none; }
-      
-      .arch-node.left .trace-line, .arch-node.right .trace-line {
-        left: 20px; right: auto; width: 20px;
+      .topbar {
+        padding: 0 1.25rem;
       }
-      .arch-node.left .trace-line-glow, .arch-node.right .trace-line-glow {
-        left: 20px; right: auto; animation: drawTraceRightMobile 0.5s ease forwards;
+
+      .hamburger {
+        display: flex;
       }
-      
-      .core-joint { left: 20px; }
-      
-      .node-wrap { width: 100%; padding-left: 40px !important; padding-right: 0 !important; margin-left: 0 !important; }
-      .data-block { max-width: 100%; }
+
+      .topbar-right .nav-link,
+      .topbar-right .hire-btn {
+        display: none;
+      }
+
+      .arch-axis,
+      .arch-axis-glow {
+        left: 20px;
+        transform: none;
+      }
+
+      .arch-node.left .trace-line,
+      .arch-node.right .trace-line {
+        left: 20px;
+        right: auto;
+        width: 20px;
+      }
+
+      .arch-node.left .trace-line-glow,
+      .arch-node.right .trace-line-glow {
+        left: 20px;
+        right: auto;
+        animation: drawTraceRightMobile 0.5s ease forwards;
+      }
+
+      .core-joint {
+        left: 20px;
+      }
+
+      .node-wrap {
+        width: 100%;
+        padding-left: 40px !important;
+        padding-right: 0 !important;
+        margin-left: 0 !important;
+      }
+
+      .data-block {
+        max-width: 100%;
+      }
     }
 
     @keyframes drawTraceRightMobile {
-      from { width: 0; }
-      to { width: 20px; }
+      from {
+        width: 0;
+      }
+
+      to {
+        width: 20px;
+      }
     }
   </style>
 </head>
@@ -404,7 +786,8 @@
     <div class="sys-header">
       <div class="sys-label">SYSTEM_CORE // EXPERIENCE_MATRIX</div>
       <h1 class="sys-title">Cognitive Architecture</h1>
-      <p class="sys-sub">Execution logs and deployment history across complex systems engineering, bare-metal development, and AGI research.</p>
+      <p class="sys-sub">Execution logs and deployment history across complex systems engineering, bare-metal
+        development, and AGI research.</p>
     </div>
 
     <div class="arch-container">
@@ -416,21 +799,25 @@
         <div class="trace-line"></div>
         <div class="trace-line-glow"></div>
         <div class="core-joint"></div>
-        
+
         <div class="node-wrap">
           <div class="data-block">
             <div class="laser"></div>
             <div class="block-header">
-              <span class="sys-id">T-MINUS :: OCT 2024 - PRESENT</span>
+              <span class="sys-id">OCT 2024 - PRESENT</span>
               <span class="sys-status">ACTIVE</span>
             </div>
             <div class="block-body">
-              <h3 class="block-title">CORE ALIGNMENT & AGI RESEARCH</h3>
+              <h3 class="block-title">AI RESEARCH</h3>
               <div class="block-org">DOMAIN // INDEPENDENT</div>
               <p class="block-desc">
-                Architecting the foundational substrate for machine consciousness. Moving beyond primitive model-scaling, my research focuses on highly complex, autonomous cognitive systems. 
+                Architecting the foundational substrate for machine consciousness. Moving beyond primitive
+                model-scaling, my research focuses on highly complex, autonomous cognitive systems.
                 <br><br>
-                Engineered <strong>Ovan</strong>, an autonomous synthesis engine capable of deterministic generation of secure, production-grade infrastructures. This required the genesis of a fractal multi-agent network (ACN), a neuro-inspired associative memory layer (ACMS), and the <strong>Obsidian Thinking Machine</strong>—introducing forced lateral contemplation for unprecedented machine creativity.
+                Engineered <strong>Ovan</strong>, an autonomous synthesis engine capable of deterministic generation of
+                secure, production-grade infrastructures. This required the genesis of a fractal multi-agent network
+                (ACN), a neuro-inspired associative memory layer (ACMS), and the <strong>Obsidian Thinking
+                  Machine</strong>—introducing forced lateral contemplation for unprecedented machine creativity.
               </p>
             </div>
           </div>
@@ -442,21 +829,24 @@
         <div class="trace-line"></div>
         <div class="trace-line-glow"></div>
         <div class="core-joint"></div>
-        
+
         <div class="node-wrap">
           <div class="data-block">
             <div class="laser"></div>
             <div class="block-header">
-              <span class="sys-id">T-MINUS :: JAN 2023 - NOV 2025</span>
+              <span class="sys-id">JAN 2023 - NOV 2025</span>
               <span class="sys-status" style="color: var(--muted);">ARCHIVED</span>
             </div>
             <div class="block-body">
-              <h3 class="block-title">FULL-STACK ARCHITECTURE & AUTOMATION</h3>
+              <h3 class="block-title">FULL-STACK DEVELOPMENT</h3>
               <div class="block-org">INDEPENDENT CONTRACTOR</div>
               <p class="block-desc">
-                Engineered high-fidelity web and mobile architectures across diverse sectors. Designed an AI-driven orchestration engine that autonomously executed complex research pipelines, generating structured output in real-time. 
+                Engineered high-fidelity web and mobile architectures across diverse sectors. Designed an AI-driven
+                orchestration engine that autonomously executed complex research pipelines, generating structured output
+                in real-time.
                 <br><br>
-                Deployed an enterprise-grade Property Management System natively within the Frappe framework, alongside a specialized trading algorithm leveraging AI for predictive market analysis.
+                Deployed an enterprise-grade Property Management System natively within the Frappe framework, alongside
+                a specialized trading algorithm leveraging AI for predictive market analysis.
               </p>
             </div>
           </div>
@@ -468,20 +858,22 @@
         <div class="trace-line"></div>
         <div class="trace-line-glow"></div>
         <div class="core-joint"></div>
-        
+
         <div class="node-wrap">
           <div class="data-block">
             <div class="laser"></div>
             <div class="block-header">
-              <span class="sys-id">T-MINUS :: JUN 2021 - DEC 2022</span>
+              <span class="sys-id">JUN 2021 - DEC 2022</span>
               <span class="sys-status" style="color: var(--muted);">ARCHIVED</span>
             </div>
             <div class="block-body">
               <h3 class="block-title">EMBEDDED SYSTEMS ENGINEERING</h3>
               <div class="block-org">TEGASSEN NIGERIA LTD</div>
-              <p class="block-desc">
-                Bridged the digital and physical domains through embedded hardware design. Architected and deployed smart security matrices, autonomous alarm networks, and intelligent structural management systems, establishing the groundwork for robust hardware-software integration.
-              </p>
+              <ul class="block-list">
+                <li><strong>Smart Security Systems:</strong> Built and deployed perimeter fence security, location tracking, personal alarm systems, and smart dangerous person detection systems.</li>
+                <li><strong>Automation Ecosystems:</strong> Architected home, school, and business automation solutions, including access control, class attendance, and digital bell systems for churches.</li>
+                <li><strong>Mobile Control Interfaces:</strong> Developed intuitive mobile applications to provide seamless, centralized control over all smart hardware deployments.</li>
+              </ul>
             </div>
           </div>
         </div>
@@ -505,4 +897,5 @@
     }
   </script>
 </body>
+
 </html>
