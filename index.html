@@ -22,7 +22,8 @@
       --bg: #1A1714;
       --accent: #D97757;
       --text: #F5AD8C;
-      --text-muted: #7A6E66;
+      --text-muted: #b8aea7;
+      ;
       --border: rgba(245, 173, 140, 0.1);
       --sans: 'DM Sans', sans-serif;
       --radius: 10px;
@@ -438,6 +439,11 @@
       height: 1.1em;
     }
 
+    /* Static (no-JS / fetch) essay paragraphs — JS typewriter replaces these on load */
+    .essay-text p {
+      margin-bottom: 1.1em;
+    }
+
     /* ── Robot ── */
     .robot-cursor {
       display: inline-block;
@@ -773,6 +779,7 @@
       <a class="nav-link" href="about.html">About</a>
       <a class="nav-link" href="experience.html">Experience</a>
       <a class="nav-link" href="portfolio.html">Work</a>
+      <a class="nav-link" href="skills.html">Skills</a>
       <a class="nav-link" href="writing.html">Writing</a>
       <button class="hire-btn" onclick="openHire()" id="hire-btn">Hire Me</button>
       <button class="hamburger" id="hamburger" aria-label="Toggle menu">
@@ -786,6 +793,7 @@
     <a class="drawer-link" href="about.html">About</a>
     <a class="drawer-link" href="experience.html">Experience</a>
     <a class="drawer-link" href="portfolio.html">Work</a>
+    <a class="drawer-link" href="skills.html">Skills</a>
     <a class="drawer-link" href="writing.html">Writing</a>
     <button class="drawer-hire" onclick="closeMobileMenu(); openHire();">Hire Me</button>
   </div>
@@ -793,11 +801,17 @@
   <div class="container">
     <div class="essay-box" id="essay-box">
       <div class="essay-inner" id="essay-inner">
-        <div class="essay-text" id="essay-text" aria-live="polite"></div>
+        <div class="essay-text" id="essay-text" aria-live="polite">
+          <p>Hi Chief, I'm Gift Braimah — Fullstack Developer &amp; AI Systems Engineer.</p>
+          <p>I design, build and run production systems: ERP platforms, agentic AI assistants, and cloud infrastructure
+            — live in production today.</p>
+          <p>And I research cognitive architectures — machine memory, reasoning swarms, machine thought — on the path to
+            superintelligence.</p>
+        </div>
       </div>
     </div>
 
-    <button id="delve-btn" class="delve-btn btn btn-primary">Skip and delve in</button>
+    <button id="delve-btn" class="delve-btn btn btn-primary">Skip intro</button>
   </div>
 
   <div class="scroll-hint" id="scroll-hint">
@@ -834,14 +848,14 @@
           <strong>WhatsApp</strong>. These are my primary contact channels.
         </p>
         <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-          <a href="mailto:braimahgifted@gmail.com" class="hire-modal-link">
+          <a href="mailto:giftedb87@gmail.com" class="hire-modal-link">
             <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
               <path d="M2 4L8 8L14 4M2 12H14V4H2V12Z" stroke="currentColor" stroke-width="1.2"
                 stroke-linejoin="round" />
             </svg>
-            braimahgifted@gmail.com
+            giftedb87@gmail.com
           </a>
-          <a href="https://wa.me/2349113083786" target="_blank" class="hire-modal-link"
+          <a href="https://wa.me/2349065215137" target="_blank" class="hire-modal-link"
             style="background: rgba(37, 211, 102, 0.1); border-color: rgba(37, 211, 102, 0.2); color: #25D366;">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
               <path
@@ -879,19 +893,11 @@
 
   <script>
     const ESSAY = [
-      "Hi Chief, my name is Gifted, and I want to take you on a journey to Super-Intelligence.",
+      "Hi Chief, I'm Gift Braimah — Fullstack Developer & AI Systems Engineer.",
       "",
-      "Think about termites. A single termite isn't so intelligent; isolated, it behaves quite simply. Yet, when you take multitudes of them, assign specific roles, and give them a structured way to communicate, they build incredibly complex mounds that requires an extreme level of intelligence to build. The intelligence isn't in the termite—it's in the organizational architecture they operate in.",
+      "I design, build and run production systems: ERP platforms, agentic AI assistants, and cloud infrastructure — live in production today.",
       "",
-      "The human brain works exactly the same way. A single neuron isn't intelligent. But arrange millions of them into a specific structure with precise communication rules, and human intelligence emerges.",
-      "",
-      "Even the Burj Khalifa wasn't built by one super-intelligent entity. No single person had all the domain knowledge required. It took multitudes of humans with different specializations, arranged in a specific organizational architecture, to produce a super-intelligent outcome.",
-      "",
-      "Chief, after studying these patterns, I realized in December 2024 that Super-Intelligence is an architectural problem.",
-      "",
-      "I immediately started drafting a conceptual architecture using current AI models. So far, I've built a functional prototype of a \"system of systems\" that demonstrates human-level intelligence in backend software development. I also applied this concept to thinking in LLMs, and I built a thinking machine prototype with extreme depths of creative reasoning and innovation.",
-      "",
-      "This is my quest and my passion: to build the cognitive architectures that will extend the capabilities of AI models until we achieve true super, general intelligence."
+      "And I research cognitive architectures — machine memory, reasoning swarms, machine thought — on the path to superintelligence."
     ];
 
     const ROBOT_SVG = `<svg class="robot-cursor" id="robot" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -988,10 +994,10 @@
         statusDot.style.opacity = '0.35';
       }
       essayBox.classList.add('done');
+      // Auto-advance into the portfolio — no click needed
       setTimeout(() => {
-        essayBox.scrollTo({ top: 0, behavior: 'smooth' });
-        setTimeout(() => scrollHint.classList.add('visible'), 900);
-      }, 350);
+        window.location.href = "portfolio.html";
+      }, 2200);
     }
 
     function typeNext() {

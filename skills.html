@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skills — Gift Braimah</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+  <style>
+    /* ═══════════════════════════ TOKENS ═══════════════════════════ */
+    :root {
+      --bg: #111009;
+      --bg1: #181512;
+      --bg2: #201C18;
+      --bg3: #2A2521;
+      --accent: #D97757;
+      --text: #F5AD8C;
+      --text2: #C49070;
+      --muted: #b8aea7;
+      --muted2: #3E3830;
+      --border: rgba(245, 173, 140, 0.09);
+      --border2: rgba(245, 173, 140, 0.18);
+      --sans: 'DM Sans', sans-serif;
+      --serif: 'Lora', Georgia, serif;
+      --mono: 'Share Tech Mono', monospace;
+    }
+
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      line-height: 1.8;
+      overflow-x: hidden;
+    }
+
+    /* ─── Ambient atmosphere ─── */
+    .atmosphere {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .atmosphere::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 55% at 50% 50%, rgba(217, 119, 87, 0.04) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 35% at 10% 10%, rgba(91, 155, 213, 0.03) 0%, transparent 60%);
+    }
+
+    /* ─── Topbar ─── */
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      height: 54px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2.5rem;
+      border-bottom: 1px solid var(--border);
+      background: rgba(17, 16, 9, 0.85);
+      backdrop-filter: blur(16px);
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-img {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--accent);
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .logo-img:hover {
+      transform: scale(1.08);
+    }
+
+    .topbar-name {
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .topbar-sep {
+      width: 1px;
+      height: 16px;
+      background: var(--muted2);
+    }
+
+    .topbar-section {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    /* ─── Hamburger ─── */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 36px;
+      height: 36px;
+      background: none;
+      border: 1px solid var(--border2);
+      border-radius: 8px;
+      cursor: pointer;
+      padding: 8px;
+      transition: border-color 0.2s;
+    }
+
+    .hamburger:hover {
+      border-color: var(--accent);
+    }
+
+    .hamburger span {
+      display: block;
+      height: 1.5px;
+      background: var(--text);
+      border-radius: 2px;
+      transition: all 0.25s ease;
+      transform-origin: center;
+    }
+
+    .hamburger.open span:nth-child(1) {
+      transform: translateY(6.5px) rotate(45deg);
+    }
+
+    .hamburger.open span:nth-child(2) {
+      opacity: 0;
+      transform: scaleX(0);
+    }
+
+    .hamburger.open span:nth-child(3) {
+      transform: translateY(-6.5px) rotate(-45deg);
+    }
+
+    /* ─── Mobile Drawer ─── */
+    .mobile-drawer {
+      display: none;
+      position: fixed;
+      top: 54px;
+      left: 0;
+      right: 0;
+      z-index: 99;
+      background: rgba(17, 16, 9, 0.97);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      flex-direction: column;
+      padding: 1.25rem 1.5rem 1.5rem;
+      gap: 0.25rem;
+      transform: translateY(-10px);
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.25s ease;
+    }
+
+    .mobile-drawer.open {
+      display: flex;
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .drawer-link {
+      font-family: var(--sans);
+      font-size: 15px;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 0.85rem 0;
+      border-bottom: 1px solid var(--border);
+      transition: color 0.15s;
+    }
+
+    .drawer-link:last-child {
+      border-bottom: none;
+    }
+
+    .drawer-link:hover,
+    .drawer-link.active {
+      color: var(--text);
+    }
+
+    .drawer-hire {
+      margin-top: 0.75rem;
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 500;
+      color: #1A0E08;
+      background: var(--accent);
+      border: none;
+      border-radius: 10px;
+      padding: 12px 20px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.18s;
+      box-shadow: 0 2px 12px rgba(217, 119, 87, 0.3);
+    }
+
+    .nav-link {
+      font-size: 13px;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      color: var(--text);
+    }
+
+    .hire-btn {
+      font-family: var(--sans);
+      font-size: 12px;
+      font-weight: 500;
+      color: #1A0E08;
+      background: var(--accent);
+      border: none;
+      border-radius: 8px;
+      padding: 7px 16px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s;
+      box-shadow: 0 2px 12px rgba(217, 119, 87, 0.3);
+    }
+
+    .hire-btn:hover {
+      box-shadow: 0 4px 20px rgba(217, 119, 87, 0.45);
+      transform: translateY(-1px);
+    }
+
+    /* ─── About Layout ─── */
+    .about-wrapper {
+      max-width: 900px;
+      margin: 140px auto 100px;
+      padding: 0 2rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .about-header {
+      margin-bottom: 4rem;
+      text-align: center;
+    }
+
+    .about-title {
+      font-family: var(--serif);
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 400;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      color: var(--text);
+    }
+
+    .about-subtitle {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+    }
+
+    .about-content {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    @media (max-width: 850px) {
+      .about-content {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar {
+        padding: 0 1.25rem;
+      }
+
+      .topbar-right .nav-link,
+      .topbar-right .hire-btn {
+        display: none;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+
+      .mobile-drawer {
+        display: flex;
+      }
+    }
+
+    .main-bio {
+      font-family: var(--serif);
+      font-size: 18px;
+      color: var(--text2);
+      line-height: 1.85;
+    }
+
+    .main-bio p {
+      margin-bottom: 2rem;
+    }
+
+    .main-bio h2 {
+      font-family: var(--sans);
+      font-size: 22px;
+      color: var(--text);
+      margin: 3.5rem 0 1.5rem;
+      font-weight: 500;
+    }
+
+    .main-bio strong {
+      color: var(--accent);
+      font-weight: 400;
+    }
+
+    .bio-quote {
+      border-left: 2px solid var(--accent);
+      padding-left: 1.5rem;
+      font-style: italic;
+      color: var(--text);
+      margin: 3rem 0;
+      font-size: 19px;
+    }
+
+    /* ─── Side Panel ─── */
+    .side-panel {
+      background: var(--bg1);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2rem;
+      position: sticky;
+      top: 100px;
+    }
+
+    .side-image {
+      width: 100%;
+      aspect-ratio: 1/1;
+      border-radius: 12px;
+      object-fit: cover;
+      margin-bottom: 1.5rem;
+      border: 1px solid var(--border2);
+    }
+
+    .side-heading {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.5rem;
+    }
+
+    .tech-list {
+      list-style: none;
+      margin-bottom: 2.5rem;
+    }
+
+    .tech-list li {
+      font-size: 14px;
+      color: var(--text2);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tech-list li::before {
+      content: '';
+      width: 4px;
+      height: 4px;
+      background: var(--accent);
+      border-radius: 50%;
+    }
+
+    .contact-links {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      text-decoration: none;
+      font-size: 13px;
+      transition: all 0.2s;
+    }
+
+    .contact-link:hover {
+      border-color: var(--accent);
+      background: rgba(217, 119, 87, 0.05);
+      transform: translateX(4px);
+    }
+
+    /* Profile Modal specific */
+    .profile-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 8, 6, 0.85);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 300;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .profile-modal-backdrop.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .profile-modal {
+      background: var(--bg2);
+      border: 1px solid var(--border2);
+      border-radius: 20px;
+      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6);
+      width: min(400px, 92vw);
+      transform: scale(0.95) translateY(10px);
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      overflow: hidden;
+    }
+
+    .profile-modal-backdrop.open .profile-modal {
+      transform: scale(1) translateY(0);
+    }
+
+    .p-modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .p-modal-title {
+      font-family: var(--sans);
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .p-modal-close {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .p-modal-body img {
+      width: 100%;
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="atmosphere"></div>
+
+  <!-- ── Topbar ── -->
+  <nav class="topbar">
+    <div class="topbar-left">
+      <img src="https://i.ibb.co/JRV0C3r5/Snapchat-1213438513-01.jpg" alt="Gift Braimah" class="logo-img"
+        id="profile-trigger">
+      <a href="index.html" class="topbar-name" style="text-decoration: none;">Gift Braimah</a>
+      <span class="topbar-sep"></span>
+      <span class="topbar-section">Skills</span>
+    </div>
+    <div class="topbar-right">
+      <a class="nav-link" href="about.html">About</a>
+      <a class="nav-link" href="experience.html">Experience</a>
+      <a class="nav-link" href="portfolio.html">Work</a>
+      <a class="nav-link active" href="skills.html">Skills</a>
+      <a class="nav-link" href="writing.html">Writing</a>
+      <button class="hire-btn" onclick="openHire()" id="hire-btn">Hire Me</button>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ── Mobile Drawer ── -->
+  <div class="mobile-drawer" id="mobile-drawer">
+    <a class="drawer-link" href="about.html">About</a>
+    <a class="drawer-link" href="experience.html">Experience</a>
+    <a class="drawer-link" href="portfolio.html">Work</a>
+    <a class="drawer-link active" href="skills.html">Skills</a>
+    <a class="drawer-link" href="writing.html">Writing</a>
+    <button class="drawer-hire" onclick="closeMobileMenu(); openHire();">Hire Me</button>
+  </div>
+
+  <!-- ── Main Content ── -->
+  <main class="about-wrapper">
+    <header class="about-header">
+      <div class="about-subtitle">Full capability index</div>
+      <h1 class="about-title">The full stack, top to bottom.</h1>
+    </header>
+
+    <div class="about-content">
+
+      <!-- Left Column: Skill domains -->
+      <article class="main-bio">
+        <p>Seven domains, one engineer — from bare-metal firmware to multi-agent cognition. Every item
+          below is drawn from production deployments and shipped systems, not tutorials.</p>
+
+        <h2>1 · Full-Stack Development</h2>
+        <p>Python, TypeScript, JavaScript, Elixir, Node.js, Flask, React, MERN Stack, Electron, Socket.IO
+          &amp; WebSockets, HTML/CSS, Tailwind CSS, REST &amp; GraphQL APIs, Kafka, Redis, Microservices
+          Architecture, Clean Architecture &amp; DDD.</p>
+        <p>Seen in: <a href="https://github.com/gifted87/Nerd_Master_AI" target="_blank" rel="noopener">Nerd Master
+            AI</a> ·
+          <a href="https://github.com/gifted87/Zazzaman" target="_blank" rel="noopener">Zazzaman</a> ·
+          <a href="https://github.com/gifted87/sharedCanvas" target="_blank" rel="noopener">sharedCanvas</a> ·
+          <a href="https://github.com/gifted87/Ecommerce-Backend" target="_blank" rel="noopener">E-commerce Backend</a>
+        </p>
+
+        <h2>2 · AI Systems Engineering</h2>
+        <p>Predictive Modeling, PyTorch, TensorFlow, Keras, Scikit-learn, Deep Learning, Memory-Augmented
+          Neural Networks, Reinforcement Learning, Generative Models, Data Structures &amp; Algorithms,
+          Probability &amp; Statistics, multi-agent orchestration, ReAct agent loops, MCP, LLM integration
+          (Gemini, OpenAI-compatible APIs, Ollama/vLLM local models), semantic &amp; spreading-activation
+          memory architectures, critic-refinement pipelines, TinyML.</p>
+        <p>Seen in: <a href="https://github.com/gifted87/obsidian" target="_blank" rel="noopener">Obsidian</a> ·
+          <a href="https://github.com/gifted87/acms" target="_blank" rel="noopener">ACMS</a> ·
+          <a href="https://github.com/gifted87/acn" target="_blank" rel="noopener">ACN</a> ·
+          <a href="https://github.com/gifted87/procoder" target="_blank" rel="noopener">ProCoder</a> ·
+          <a href="https://github.com/gifted87/Virgo-AI-Assistant-for-ERPNext" target="_blank" rel="noopener">Virgo</a>
+        </p>
+
+        <h2>3 · ERP &amp; Enterprise Systems</h2>
+        <p>ERP development, setup, configuration and customization, custom apps, server scripts, data
+          migration, go-live and post-launch optimization, Property Management Systems, POS systems,
+          accounting systems, hospitality and retail operations.</p>
+        <p>Seen in: <a href="https://github.com/gifted87/erpnext_hospitality_core" target="_blank"
+            rel="noopener">Hospitality Core</a> ·
+          <a href="https://github.com/gifted87/Virgo-AI-Assistant-for-ERPNext" target="_blank" rel="noopener">Virgo</a>
+          ·
+          <a href="https://github.com/gifted87/ERPNEXT_Receipt_Printer" target="_blank" rel="noopener">Receipt
+            Printer</a>
+        </p>
+
+        <h2>4 · Cloud Administration &amp; DevOps</h2>
+        <p>AWS, CI/CD and DevOps practices, Linux server administration, provisioning, deployment, backup
+          &amp; recovery, security hardening, monitoring &amp; uptime (99%+ sustained across client
+          deployments), Docker, Vagrant, Git workflows, performance tuning, Bash, Firebase.</p>
+
+        <h2>5 · Embedded Systems &amp; Edge AI</h2>
+        <p>C/C++, ESP32/ESP-IDF, ATmega/AVR bare-metal programming, TensorFlow Lite / Edge Impulse, Modbus
+          RTU, MQTT over TLS, Raspberry Pi, Arduino, Embedded Linux, IoT architecture, sensor data analysis
+          &amp; fusion, hardware-software interfacing, GSM/SMS telemetry, fixed-point DSP (FFT), real-world
+          industrial deployment.</p>
+        <p>Seen in: <a href="https://github.com/gifted87/esp32-secure-lock" target="_blank" rel="noopener">Secure
+            Lock</a> ·
+          <a href="https://github.com/gifted87/atmega-tinyml-pump-monitor" target="_blank" rel="noopener">TinyML Pump
+            Monitor</a> ·
+          <a href="https://github.com/gifted87/IPFSS2" target="_blank" rel="noopener">Fence Security</a> ·
+          <a href="https://github.com/gifted87/TegassenAutobell" target="_blank" rel="noopener">Autobell</a>
+        </p>
+
+        <h2>6 · Databases &amp; Storage</h2>
+        <p>SQL (PostgreSQL, MariaDB), NoSQL (MongoDB, Redis, Firebase), IndexedDB, database performance
+          tuning.</p>
+
+        <h2>7 · Security &amp; Systems</h2>
+        <p>AES-256 encryption, hardware secure elements (ATECC608A), ECDSA signed commands, TLS 1.2/1.3,
+          anti-replay TOTP, cybersecurity best practices, penetration testing tooling, real-time
+          systems.</p>
+        <p>Seen in: <a href="https://github.com/gifted87/esp32-secure-lock" target="_blank" rel="noopener">Secure
+            Lock</a> ·
+          <a href="https://github.com/gifted87/fraud-detection-engine" target="_blank" rel="noopener">Fraud Detection
+            Engine</a>
+        </p>
+
+        <div class="bio-quote">
+          "I lead the full cycle: idea, deployment, client integration, and feedback — with code review,
+          documentation and team coordination throughout."
+        </div>
+
+        <p>If you are building production systems or the future of intelligence, I would love to
+          connect.</p>
+      </article>
+
+
+      <!-- Right Column: Quick Facts & Contact -->
+      <aside class="side-panel">
+        <img src="https://i.ibb.co/JRV0C3r5/Snapchat-1213438513-01.jpg" alt="Gift Braimah" class="side-image">
+
+        <div class="side-heading">Core Stack & Topography</div>
+        <ul class="tech-list">
+          <li>Full-Stack — Python, TypeScript, React, Node.js</li>
+          <li>AI Systems — PyTorch, multi-agent orchestration, LLM integration</li>
+          <li>ERP & Enterprise — Frappe/ERPNext, PMS, POS</li>
+          <li>Cloud & DevOps — AWS, Docker, CI/CD, Linux</li>
+          <li>Embedded & Edge AI — C/C++, ESP32, TinyML</li>
+          <li>Databases — PostgreSQL, MongoDB, Redis</li>
+          <li>Security — AES-256, TLS, secure elements</li>
+        </ul>
+        <a href="portfolio.html" class="contact-link">See it in production →</a>
+
+        <div class="contact-links">
+          <!-- Email -->
+          <a href="mailto:giftedb87@gmail.com" class="contact-link">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M2 4L8 8L14 4M2 12H14V4H2V12Z" stroke="currentColor" stroke-width="1.2"
+                stroke-linejoin="round" />
+            </svg>
+            giftedb87@gmail.com
+          </a>
+
+          <!-- X (Twitter) -->
+          <a href="https://x.com/GiftedBraimah" target="_blank" class="contact-link">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <path
+                d="M12.6.75h2.4L8.9 7.14 16 15.25h-5.6l-4.3-5.13-5.0 5.13H-1.3l6.5-7.43L-1.3.75h5.8l3.9 4.75L12.6.75zm-1 13H13.4L3.6 2.25H2.2l9.4 11.5z" />
+            </svg>
+            X (Twitter)
+          </a>
+
+          <!-- GitHub -->
+          <a href="https://github.com/gifted87" target="_blank" class="contact-link">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <path
+                d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" />
+            </svg>
+            GitHub
+          </a>
+
+          <!-- WhatsApp -->
+          <a href="https://wa.me/2349065215137" target="_blank" class="contact-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+            </svg>
+            WhatsApp
+          </a>
+        </div>
+      </aside>
+
+    </div>
+  </main>
+
+
+
+  <!-- Profile Modal -->
+  <div class="profile-modal-backdrop" id="profile-modal-backdrop">
+    <div class="profile-modal">
+      <div class="p-modal-header">
+        <div class="p-modal-title">Gift Braimah</div>
+        <button class="p-modal-close" id="profile-modal-close">&times;</button>
+      </div>
+      <div class="p-modal-body">
+        <img src="https://i.ibb.co/JRV0C3r5/Snapchat-1213438513-01.jpg" alt="Gift Braimah Full Photo">
+      </div>
+    </div>
+  </div>
+
+  <!-- Hire Modal -->
+  <div class="profile-modal-backdrop" id="hire-modal-backdrop">
+    <div class="profile-modal" style="width: min(440px, 92vw);">
+      <div class="p-modal-header">
+        <div class="p-modal-title">Let's Connect</div>
+        <button class="p-modal-close" id="hire-modal-close">&times;</button>
+      </div>
+      <div class="p-modal-body" style="padding: 2.5rem 2rem; text-align: center;">
+        <p
+          style="color: var(--text2); font-size: 16px; margin-bottom: 2rem; line-height: 1.6; font-family: var(--serif);">
+          For high-fidelity engineering or AI architecture inquiries, please reach out via <strong>Email</strong> or
+          <strong>WhatsApp</strong>. These are my primary contact channels.
+        </p>
+        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+          <a href="mailto:giftedb87@gmail.com" class="hire-modal-link">
+            <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
+              <path d="M2 4L8 8L14 4M2 12H14V4H2V12Z" stroke="currentColor" stroke-width="1.2"
+                stroke-linejoin="round" />
+            </svg>
+            giftedb87@gmail.com
+          </a>
+          <a href="https://wa.me/2349065215137" target="_blank" class="hire-modal-link"
+            style="background: rgba(37, 211, 102, 0.1); border-color: rgba(37, 211, 102, 0.2); color: #25D366;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+            </svg>
+            Chat on WhatsApp
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .hire-modal-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 1.25rem;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      color: var(--text);
+      text-decoration: none;
+      font-family: var(--sans);
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+
+    .hire-modal-link:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+  </style>
+  <script>
+    // Profile Modal Logic
+    const pModal = document.getElementById('profile-modal-backdrop');
+    const pTrigger = document.getElementById('profile-trigger');
+    const pClose = document.getElementById('profile-modal-close');
+
+    if (pTrigger) {
+      pTrigger.addEventListener('click', () => pModal.classList.add('open'));
+    }
+    if (pClose) {
+      pClose.addEventListener('click', () => pModal.classList.remove('open'));
+    }
+    if (pModal) {
+      pModal.addEventListener('click', (e) => {
+        if (e.target === pModal) pModal.classList.remove('open');
+      });
+    }
+
+    // Hire Modal Logic
+    const hModal = document.getElementById('hire-modal-backdrop');
+    const hClose = document.getElementById('hire-modal-close');
+    window.openHire = () => hModal.classList.add('open');
+    if (hClose) hClose.addEventListener('click', () => hModal.classList.remove('open'));
+    if (hModal) hModal.addEventListener('click', (e) => { if (e.target === hModal) hModal.classList.remove('open'); });
+
+    // Hamburger / Mobile Menu
+    const hamburger = document.getElementById('hamburger');
+    const mobileDrawer = document.getElementById('mobile-drawer');
+
+    function closeMobileMenu() {
+      hamburger.classList.remove('open');
+      mobileDrawer.classList.remove('open');
+    }
+
+    if (hamburger) {
+      hamburger.addEventListener('click', () => {
+        hamburger.classList.toggle('open');
+        mobileDrawer.classList.toggle('open');
+      });
+    }
+
+    document.addEventListener('click', (e) => {
+      if (hamburger && mobileDrawer && !hamburger.contains(e.target) && !mobileDrawer.contains(e.target)) {
+        closeMobileMenu();
+      }
+    });
+  </script>
+</body>
+
+</html>

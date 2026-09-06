@@ -20,7 +20,7 @@
       --accent-glow: rgba(217, 119, 87, 0.5);
       --text: #F5AD8C;
       --text2: #C49070;
-      --muted: #6B6058;
+      --muted: #b8aea7;
       --border: rgba(245, 173, 140, 0.08);
       --border2: rgba(245, 173, 140, 0.2);
       --border-lit: rgba(245, 173, 140, 0.4);
@@ -765,6 +765,7 @@
       <a class="nav-link" href="about.html">About</a>
       <a class="nav-link active" href="experience.html">Experience</a>
       <a class="nav-link" href="portfolio.html">Work</a>
+      <a class="nav-link" href="skills.html">Skills</a>
       <a class="nav-link" href="writing.html">Writing</a>
       <button class="hire-btn" onclick="openHire()">Hire Me</button>
       <button class="hamburger" id="hamburger" aria-label="Toggle menu">
@@ -778,6 +779,7 @@
     <a class="drawer-link" href="about.html">About</a>
     <a class="drawer-link active" href="experience.html">Experience</a>
     <a class="drawer-link" href="portfolio.html">Work</a>
+    <a class="drawer-link" href="skills.html">Skills</a>
     <a class="drawer-link" href="writing.html">Writing</a>
     <button class="drawer-hire" onclick="openHire()">Hire Me</button>
   </div>
@@ -794,7 +796,7 @@
       <div class="arch-axis"></div>
       <div class="arch-axis-glow"></div>
 
-      <!-- Node 1: Solo Researcher -->
+      <!-- Node 1: Brainova Technologies -->
       <div class="arch-node left">
         <div class="trace-line"></div>
         <div class="trace-line-glow"></div>
@@ -804,14 +806,54 @@
           <div class="data-block">
             <div class="laser"></div>
             <div class="block-header">
-              <span class="sys-id">OCT 2024 - PRESENT</span>
+              <span class="sys-id">MAY 2023 - AUG 2026</span>
               <span class="sys-status">ACTIVE</span>
             </div>
             <div class="block-body">
-              <h3 class="block-title">AI RESEARCH</h3>
-              <div class="block-org">INDEPENDENT RESEARCHER</div>
+              <h3 class="block-title">FULLSTACK DEVELOPER &amp; AI SYSTEMS ENGINEER</h3>
+              <div class="block-org">BRAINOVA TECHNOLOGIES</div>
               <p class="block-desc">
-                Researched and built several systems to solve bottlenecks in current AI systems, including:
+                Product leader and hands-on engineer — owned requirements, architecture, roadmaps,
+                development coordination, cloud deployment and client integration:
+              </p>
+              <ul class="block-list">
+                <li><strong>Hospitality Core (Production PMS):</strong> Led the team that delivered an
+                  enterprise-grade Property Management System on Frappe/ERPNext — front office, financial
+                  engine, maintenance, group bookings, rates and inventory. In daily production use at
+                  client hotels; cut month-end reconciliation from days to hours.</li>
+                <li><strong>Virgo (Autonomous AI Agent):</strong> Architected an agent that performs server
+                  operations, database queries, calculations, chart plotting and server-script execution
+                  on ERPNext in plain language — governed by real-time approvals. Cut routine admin and
+                  reporting work by ~70%.</li>
+                <li><strong>Nerd Master AI:</strong> Built and shipped a full-stack AI assistant platform —
+                  streaming LLM responses, Markdown/MathJax rendering, file uploads, per-task model
+                  customization and persistent conversations across desktop and mobile.</li>
+                <li><strong>Cloud Administration:</strong> Provisioning, hardening, backups and monitoring
+                  across all client deployments — 99%+ uptime sustained.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Node 2: Independent AI research -->
+      <div class="arch-node right">
+        <div class="trace-line"></div>
+        <div class="trace-line-glow"></div>
+        <div class="core-joint"></div>
+
+        <div class="node-wrap">
+          <div class="data-block">
+            <div class="laser"></div>
+            <div class="block-header">
+              <span class="sys-id">SELF-DIRECTED · ONGOING</span>
+              <span class="sys-status">ACTIVE</span>
+            </div>
+            <div class="block-body">
+              <h3 class="block-title">INDEPENDENT PROJECTS</h3>
+              <div class="block-org">SELF-DIRECTED R&amp;D</div>
+              <p class="block-desc">
+                Systems I researched and built independently to solve bottlenecks in current AI systems, including:
               </p>
               <ul class="block-list">
                 <li><strong>The ACMS:</strong> A human-like memory for AI agents, designed to enable them to recall
@@ -833,45 +875,7 @@
         </div>
       </div>
 
-      <!-- Node 2: Freelancer -->
-      <div class="arch-node right">
-        <div class="trace-line"></div>
-        <div class="trace-line-glow"></div>
-        <div class="core-joint"></div>
-
-        <div class="node-wrap">
-          <div class="data-block">
-            <div class="laser"></div>
-            <div class="block-header">
-              <span class="sys-id">JAN 2023 - NOV 2025</span>
-              <span class="sys-status" style="color: var(--muted);">ARCHIVED</span>
-            </div>
-            <div class="block-body">
-              <h3 class="block-title">FULL-STACK DEVELOPMENT</h3>
-              <div class="block-org">INDEPENDENT CONTRACTOR</div>
-              <ul class="block-list">
-                <li><strong>Web & Automation Systems:</strong> Built high-fidelity web applications and Python-based
-                  automation systems for diverse clients (including eCommerce, Education, and Services), managing the
-                  full lifecycle from concept to deployment.</li>
-                <li><strong>Enterprise ERP Solutions:</strong> Built and deployed ERP solutions for businesses,
-                  translating client pain points into deployed products. This includes building and deploying an
-                  enterprise-grade property management system for hotels and restaurants using the frappe framework, and
-                  an accounting app adapted
-                  to Nigerian businesses for the Odoo ecosystem.</li>
-                <li><strong>Nerd Master AI:</strong> Built an AI-powered engine automating complex research, writing,
-                  and study tasks, featuring real-time document generation (PDF, Word, PPT).</li>
-                <li><strong>AI Financial Systems:</strong> Built AI-powered financial and market analysis systems,
-                  including an AI trading bot for advanced analysis on financial instruments, and the RCV System—a
-                  highly advanced multi-stage financial analysis engine utilizing sophisticated pipelines to fetch
-                  structured and unstructured stock data (daily market data, Income Statement, Balance Sheet, Cash Flow,
-                  macroeconomic indicators, SEC filings, social media, and news sentiment).</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Node 3: Embedded Systems -->
+      <!-- Node 3: Tegassen Nigeria Ltd -->
       <div class="arch-node left">
         <div class="trace-line"></div>
         <div class="trace-line-glow"></div>
@@ -881,21 +885,53 @@
           <div class="data-block">
             <div class="laser"></div>
             <div class="block-header">
-              <span class="sys-id">JUN 2021 - DEC 2022</span>
+              <span class="sys-id">MAR 2021 - MAY 2023</span>
               <span class="sys-status" style="color: var(--muted);">ARCHIVED</span>
             </div>
             <div class="block-body">
-              <h3 class="block-title">EMBEDDED SYSTEMS ENGINEERING</h3>
+              <h3 class="block-title">EMBEDDED SYSTEMS DEVELOPER</h3>
               <div class="block-org">TEGASSEN NIGERIA LTD</div>
               <ul class="block-list">
-                <li><strong>Smart Security Systems:</strong> Built and deployed smart security systems including but not
-                  limited to perimeter fence security, location tracking, personal alarm systems, and smart dangerous
-                  person detection systems.</li>
-                <li><strong>Automation Ecosystems:</strong> Architected home, school, and business automation solutions,
-                  including but not limited to access control, class attendance, and digital bell systems for churches.
-                </li>
-                <li><strong>Mobile Control Interfaces:</strong> Developed intuitive mobile applications and web
-                  applications to provide seamless, centralized control over all smart hardware deployments.</li>
+                <li><strong>Secure Smart Lock:</strong> Designed and deployed a biometric/RFID smart lock
+                  fortified with AES-256 encryption, an ATECC608A hardware secure element, MQTT over TLS,
+                  anti-replay TOTP and signed commands. Installed in multiple commercial buildings with
+                  zero reported security breaches.</li>
+                <li><strong>TinyML Fault Detection:</strong> Built vibration-based fault detection delivering
+                  92% accuracy on resource-constrained ATmega hardware — Edge Impulse model in ~1.2KB RAM,
+                  custom fixed-point FFT, Modbus RTU integration with PLC/SCADA and GSM SMS alerts —
+                  slashing critical equipment downtime by 40%.</li>
+                <li><strong>Automation Ecosystems:</strong> Architected perimeter security, location tracking,
+                  access control and digital bell systems for churches and schools — plus mobile and web
+                  interfaces for centralized control of all deployments.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Node 4: Education -->
+      <div class="arch-node right">
+        <div class="trace-line"></div>
+        <div class="trace-line-glow"></div>
+        <div class="core-joint"></div>
+
+        <div class="node-wrap">
+          <div class="data-block">
+            <div class="laser"></div>
+            <div class="block-header">
+              <span class="sys-id">EDUCATION</span>
+              <span class="sys-status" style="color: var(--muted);">CREDENTIALS</span>
+            </div>
+            <div class="block-body">
+              <h3 class="block-title">ELECTRICAL / ELECTRONICS ENGINEERING</h3>
+              <div class="block-org">FEDERAL POLYTECHNIC, AUCHI — NIGERIA</div>
+              <ul class="block-list">
+                <li><strong>Engineering foundation:</strong> Programming, signal processing, digital logic,
+                  microprocessors and microcontrollers.</li>
+                <li><strong>Google Career Certificates (2022)</strong> · <strong>ALX Software Engineering
+                    (2023)</strong> — full-stack and systems training.</li>
+                <li><strong>Community:</strong> Volunteer with the Ohiomoh Restorative Initiative — IT for
+                  education access and empowerment of vulnerable women and girls.</li>
               </ul>
             </div>
           </div>
@@ -916,7 +952,7 @@
     });
 
     function openHire() {
-      window.location.href = "mailto:braimahgifted@gmail.com";
+      window.location.href = "mailto:giftedb87@gmail.com";
     }
   </script>
 </body>

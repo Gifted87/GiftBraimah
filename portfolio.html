@@ -17,9 +17,9 @@
       --bg2: #201C18;
       --bg3: #2A2521;
       --accent: #D97757;
-      --text: #F5AD8C;
+      --text: #e9dfdb;
       --text2: #C49070;
-      --muted: #7A6E66;
+      --muted: #b8aea7;
       --muted2: #3E3830;
       --border: rgba(245, 173, 140, 0.09);
       --border2: rgba(245, 173, 140, 0.18);
@@ -43,22 +43,19 @@
       box-sizing: border-box;
     }
 
-    html,
-    body {
-      height: 100%;
-      overflow: hidden;
-    }
-
-    body {
+    html, body {
+      min-height: 100%;
       background: var(--bg);
       color: var(--text);
       font-family: var(--sans);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+      line-height: 1.7;
+    }
+
+    body {
+      display: block;
       position: relative;
       user-select: none;
+      -webkit-overflow-scrolling: touch;
     }
 
     /* ─── Ambient atmosphere ─── */
@@ -480,7 +477,8 @@
       width: var(--card-w);
       height: var(--card-h);
       border-radius: 18px;
-      overflow: hidden;
+      overflow: clip;
+      /* clip preserves border-radius but allows inner scrollbars unlike hidden */
       border: 1px solid var(--border);
       background: var(--bg2);
       display: flex;
@@ -488,6 +486,15 @@
       transition: opacity 0.5s ease, transform 0.55s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s ease, border-color 0.4s ease;
       cursor: pointer;
       position: relative;
+    }
+
+    /* Allow the card body area to scroll independently */
+    .card-scroll-wrapper {
+      flex: 1;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
     }
 
     .card.is-active {
@@ -581,6 +588,38 @@
       gap: 0.75rem;
       position: relative;
       z-index: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      overscroll-behavior: contain;
+      touch-action: pan-y;
+      /* allow vertical scroll on touch, don't block carousel swipe */
+      scrollbar-width: thin;
+      scrollbar-color: transparent transparent;
+      transition: scrollbar-color 0.25s ease;
+    }
+
+    .card-body:hover,
+    .card-body:focus-within {
+      scrollbar-color: rgba(217, 119, 87, 0.35) transparent;
+    }
+
+    .card-body::-webkit-scrollbar {
+      width: 3px;
+    }
+
+    .card-body::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .card-body::-webkit-scrollbar-thumb {
+      background: transparent;
+      border-radius: 10px;
+      transition: background 0.25s ease;
+    }
+
+    .card-body:hover::-webkit-scrollbar-thumb,
+    .card-body:focus-within::-webkit-scrollbar-thumb {
+      background: rgba(217, 119, 87, 0.35);
     }
 
     .card-title {
@@ -615,18 +654,6 @@
       font-size: 12.5px;
       color: var(--muted);
       line-height: 1.7;
-      flex: 1;
-      overflow-y: auto;
-      padding-right: 4px;
-    }
-
-    .card-desc::-webkit-scrollbar {
-      width: 2px;
-    }
-
-    .card-desc::-webkit-scrollbar-thumb {
-      background: var(--muted2);
-      border-radius: 10px;
     }
 
     .card-stack {
@@ -905,6 +932,82 @@
       opacity: 0.6;
     }
 
+    .ai-bubble p {
+      margin: 0 0 8px 0;
+    }
+
+    .ai-bubble p:last-child {
+      margin-bottom: 0;
+    }
+
+    .ai-bubble ul,
+    .ai-bubble ol {
+      margin: 6px 0 8px 18px;
+      padding: 0;
+    }
+
+    .ai-bubble li {
+      margin-bottom: 4px;
+    }
+
+    .ai-bubble pre {
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 12px;
+      overflow-x: auto;
+      font-family: var(--mono);
+      font-size: 11.5px;
+      margin: 8px 0;
+      line-height: 1.5;
+    }
+
+    .ai-bubble code {
+      font-family: var(--mono);
+      font-size: 12px;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 2px 5px;
+      border-radius: 4px;
+      color: var(--accent);
+    }
+
+    .ai-bubble pre code {
+      background: transparent;
+      padding: 0;
+      border-radius: 0;
+      color: inherit;
+      font-size: inherit;
+    }
+
+    .ai-bubble table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 8px 0;
+      font-size: 12px;
+    }
+
+    .ai-bubble th,
+    .ai-bubble td {
+      border: 1px solid var(--border);
+      padding: 6px 8px;
+      text-align: left;
+    }
+
+    .ai-bubble th {
+      background: rgba(255, 255, 255, 0.05);
+      font-weight: 600;
+    }
+
+    .ai-bubble a {
+      color: var(--accent);
+      text-decoration: underline;
+    }
+
+    .ai-bubble strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
     .typing-dots {
       display: flex;
       gap: 4px;
@@ -1083,9 +1186,13 @@
     /* ─── Responsive ─── */
     @media (max-width: 780px) {
       :root {
-        --card-w: 380px;
-        --card-h: 490px;
+        --card-w: min(92vw, 380px);
+        --card-h: auto;
         --card-gap: 20px;
+      }
+
+      body {
+        padding-top: 54px; /* clear fixed topbar */
       }
 
       .topbar {
@@ -1113,27 +1220,57 @@
         margin-bottom: 0.75rem;
       }
 
-      .card-image {
-        flex: 0 0 20%;
+      /* Carousel becomes a stacked vertical list on mobile */
+      .carousel-outer {
+        gap: 1.25rem;
       }
+      .carousel-viewport {
+        width: 100%;
+        max-width: 100vw;
+        overflow: visible;
+        -webkit-mask-image: none;
+        mask-image: none;
+      }
+      .carousel-track {
+        flex-direction: column;
+        align-items: center;
+        gap: 18px;
+        transform: none !important;
+        padding: 12px 0;
+      }
+      .card {
+        transform: none !important;
+        opacity: 1 !important;
+      }
+      .card.is-active, .card.is-adjacent, .card.is-far {
+        transform: none !important;
+        opacity: 1 !important;
+      }
+      .card-image {
+        flex: 0 0 25%;
+        min-height: 110px;
+      }
+      .carousel-nav { display: none; }
+      .scroll-hint { display: none; }
     }
 
     @media (max-width: 500px) {
       :root {
-        --card-w: 320px;
-        --card-h: 460px;
-        --card-gap: 16px;
+        --card-w: min(92vw, 320px);
+        --card-h: auto;
+        --card-gap: 14px;
       }
-
+      .card-image {
+        flex: 0 0 30%;
+        min-height: 100px;
+      }
       .card-title {
         font-size: 16px;
       }
-
       .card-links {
         flex-wrap: wrap;
         gap: 5px;
       }
-
       .card-link {
         font-size: 10.5px;
         padding: 5px 9px;
@@ -1159,6 +1296,7 @@
       <a class="nav-link" href="about.html">About</a>
       <a class="nav-link" href="experience.html">Experience</a>
       <a class="nav-link active" href="portfolio.html">Work</a>
+      <a class="nav-link" href="skills.html">Skills</a>
       <a class="nav-link" href="writing.html">Writing</a>
       <button class="hire-btn" onclick="openHire()" id="hire-btn">Hire Me</button>
       <button class="hamburger" id="hamburger" aria-label="Toggle menu">
@@ -1172,6 +1310,7 @@
     <a class="drawer-link" href="about.html">About</a>
     <a class="drawer-link" href="experience.html">Experience</a>
     <a class="drawer-link active" href="portfolio.html">Work</a>
+    <a class="drawer-link" href="skills.html">Skills</a>
     <a class="drawer-link" href="writing.html">Writing</a>
     <button class="drawer-hire" onclick="closeMobileMenu(); openHire();">Hire Me</button>
   </div>
@@ -1186,7 +1325,332 @@
   <!-- ── Carousel ── -->
   <div class="carousel-outer">
     <div class="carousel-viewport">
-      <div class="carousel-track" id="track"></div>
+      <div class="carousel-track" id="track">
+        <!-- Static project cards (fetch-readable; JS carousel hydrates these on load) -->
+        <article class="card" data-index="0">
+          <div class="card-image"
+            style="background: linear-gradient(135deg, #2A1A08 0%, #92400E 40%, #451A03 65%, #B45309 100%);">
+            <span class="card-tag">Enterprise ERP · Production</span>
+            <span class="card-year">2026</span>
+          </div>
+          <div class="card-body">
+            <div class="card-title">Hospitality Core</div>
+            <div class="card-desc">An enterprise-grade Property Management System built for Frappe/ERPNext — front
+              office, financial engine, maintenance and expense management, group &amp; corporate bookings, rate and
+              inventory management. In daily production use at client hotels.</div>
+            <div class="card-stack"><span class="stack-chip">Frappe</span><span class="stack-chip">ERPNext</span><span
+                class="stack-chip">Python</span><span class="stack-chip">MariaDB</span></div>
+            <details class="card-more">
+              <summary>About this project</summary>
+              <p>Hospitality Core transforms an ERPNext instance into a single-source-of-truth hotel operations
+                platform, replacing fragmented third-party tools. It was designed for markets where robust internal
+                controls, real-time inventory management and sophisticated corporate billing are paramount —
+                prioritizing operational integrity over costly external API dependencies. It cut month-end financial
+                reconciliation from days to hours.</p>
+            </details>
+            <div class="card-divider"></div>
+            <div class="card-links">
+              <a class="card-link" href="https://github.com/gifted87/erpnext_hospitality_core" target="_blank"
+                rel="noopener">GitHub</a>
+              <button class="card-link ai-link" onclick="openAI(0, event)">Ask AI</button>
+            </div>
+          </div>
+        </article>
+        <article class="card" data-index="1">
+          <div class="card-image"
+            style="background: linear-gradient(135deg, #17082E 0%, #6D28D9 40%, #2E1065 65%, #7C3AED 100%);">
+            <span class="card-tag">Autonomous AI Agent · Production</span>
+            <span class="card-year">2026</span>
+          </div>
+          <div class="card-body">
+            <div class="card-title">Virgo</div>
+            <div class="card-desc">An autonomous AI assistant for ERPNext that performs server operations, complex
+              database queries, data calculations, chart plotting and server-script execution in plain natural language
+              — governed by real-time security approvals.</div>
+            <div class="card-stack"><span class="stack-chip">Python</span><span class="stack-chip">ReAct</span><span
+                class="stack-chip">OpenAI API</span><span class="stack-chip">React</span><span
+                class="stack-chip">MariaDB</span></div>
+            <details class="card-more">
+              <summary>About this project</summary>
+              <p>Virgo leverages a ReAct (Reasoning and Acting) agent framework and is fully LLM-agnostic — compatible
+                with any OpenAI-compliant endpoint including DeepSeek, local models via Ollama/vLLM, Groq or OpenAI.
+                Every modifying action passes real-time security approval. It reduced routine admin and reporting work
+                by ~70% and lets non-technical staff self-serve safely.</p>
+            </details>
+            <div class="card-divider"></div>
+            <div class="card-links">
+              <a class="card-link" href="https://github.com/gifted87/Virgo-AI-Assistant-for-ERPNext" target="_blank"
+                rel="noopener">GitHub</a>
+              <button class="card-link ai-link" onclick="openAI(1, event)">Ask AI</button>
+            </div>
+          </div>
+        </article>
+        <article class="card" data-index="2">
+          <div class="card-image"
+            style="background: linear-gradient(135deg, #082032 0%, #2563EB 40%, #0A192F 65%, #3B82F6 100%);">
+            <span class="card-tag">AI SaaS Platform</span>
+            <span class="card-year">2025</span>
+          </div>
+          <div class="card-body">
+            <div class="card-title">Nerd Master AI</div>
+            <div class="card-desc">A full-stack AI assistant platform serving students, researchers and professionals —
+              streaming LLM responses, Markdown/MathJax rendering, file uploads, per-task model customization and
+              persistent conversation management across desktop and mobile.</div>
+            <div class="card-stack"><span class="stack-chip">Python</span><span
+                class="stack-chip">JavaScript</span><span class="stack-chip">WebSockets</span><span
+                class="stack-chip">MySQL</span></div>
+            <details class="card-more">
+              <summary>About this project</summary>
+              <p>Nerd Master AI is a sophisticated interactive web application built to automate complex research,
+                writing and study tasks. It streams responses asynchronously, renders mathematics and documents in real
+                time, and keeps per-task model settings like temperature and top-p — shipped as a complete product for
+                desktop and mobile users.</p>
+            </details>
+            <div class="card-divider"></div>
+            <div class="card-links">
+              <a class="card-link" href="https://github.com/gifted87/Nerd_Master_AI" target="_blank"
+                rel="noopener">GitHub</a>
+              <button class="card-link ai-link" onclick="openAI(2, event)">Ask AI</button>
+            </div>
+          </div>
+        </article>
+        <article class="card" data-index="3">
+          <div class="card-image"
+            style="background: linear-gradient(135deg, #020202 0%, #1E1B4B 40%, #0A0A0A 65%, #2E1065 100%);">
+            <span class="card-tag">Cognitive Architecture</span>
+            <span class="card-year">2026</span>
+          </div>
+          <div class="card-body">
+            <div class="card-title">Obsidian Thinking Machine</div>
+            <a href="https://github.com/Gifted87/OBSIDIAN-ARTIFACTS" target="_blank" class="extra-link">View
+              Artifacts</a>
+            <div class="card-desc">The Obsidian Thinking Machine is an advanced, highly experimental multi-agent AI
+              reasoning engine designed to simulate and elevate complex human cognitive processes in machines. It was
+              engineered to introduce Machine Creativity through Forced Lateral Contemplation.</div>
+            <div class="card-stack"><span class="stack-chip">React 19</span><span class="stack-chip">Node.js</span><span
+                class="stack-chip">Google Gemini</span><span class="stack-chip">SSE</span></div>
+            <details class="card-more">
+              <summary>About this project</summary>
+              <p>Obsidian utilizes a swarm of specialized agents—a Questioner, a Triad of Answerers, and a Controller.
+                Instead of a single linear answer, they debate across 9 distinct cognitive dimensions (like
+                Meta-Cognition, Wonder, and Consequence) before a Principal Architect synthesizes the final intent. It's
+                built to simulate deep, non-linear human reasoning.</p>
+            </details>
+            <div class="card-divider"></div>
+            <div class="card-links">
+              <a class="card-link" href="https://github.com/gifted87/obsidian" target="_blank" rel="noopener">GitHub</a>
+              <a class="card-link" href="obsidian-paradigm.html" target="_blank" rel="noopener">Paper</a>
+              <button class="card-link ai-link" onclick="openAI(3, event)">Ask AI</button>
+            </div>
+          </div>
+        </article>
+        <article class="card" data-index="4">
+          <div class="card-image"
+            style="background: linear-gradient(135deg, #062025 0%, #0E7490 40%, #083344 65%, #155E75 100%);">
+            <span class="card-tag">Memory Architecture</span>
+            <span class="card-year">2025</span>
+          </div>
+          <div class="card-body">
+            <div class="card-title">ACMS (Associative Cognitive Memory System)</div>
+            <div class="card-desc">A neuro-mimetic data orchestration grid designed specifically to serve as the
+              long-term associative brain for autonomous AI agents and multi-agent systems (MAS). It performs
+              discovery-based search using spreading activation and Hebbian neuroplasticity.</div>
+            <div class="card-stack"><span class="stack-chip">Elixir</span><span class="stack-chip">OTP</span><span
+                class="stack-chip">Python</span><span class="stack-chip">HNSWLib</span></div>
+            <details class="card-more">
+              <summary>About this project</summary>
+              <p>ACMS solves the static retrieval problem of LLMs by giving them a living, associative cortex. Instead
+                of passive k-NN database lookups, memories are independent GenServer processes that evaluate queries
+                autonomously. The system's most unique features are its Hebbian learning loop (nodes that fire together,
+                wire together), a dynamic metabolic state that triggers 'active forgetting', and dialectical
+                merging—which spawns Meta-Nodes to document conflicting facts rather than overwriting them. The hardest
+                engineering challenge was preventing graph explosions during spreading activation, which was solved by
+                implementing a Global Inhibition Factor and Synaptic Damping.</p>
+            </details>
+            <div class="card-divider"></div>
+            <div class="card-links">
+              <a class="card-link" href="https://github.com/gifted87/acms" target="_blank" rel="noopener">GitHub</a>
+              <a class="card-link" href="acms.html" target="_blank" rel="noopener">Paper</a>
+              <button class="card-link ai-link" onclick="openAI(4, event)">Ask AI</button>
+            </div>
+          </div>
+        </article>
+        <article class="card" data-index="5">
+          <div class="card-image"
+            style="background: linear-gradient(135deg, #1E1B4B 0%, #312E81 40%, #1E1B4B 65%, #4338CA 100%);">
+            <span class="card-tag">Cognitive Modelling</span>
+            <span class="card-year">2025</span>
+          </div>
+          <div class="card-body">
+            <div class="card-title">CDMS &amp; CREMS</div>
+            <div class="card-desc">A cognitive modelling engine used for the modelling and representing of
+              high-fidelity, autonomous digital environments. It was designed to give AI agents a means to natively
+              remember, interact and reason about software ecosystems just like humans do with the physical world.</div>
+            <div class="card-stack"><span class="stack-chip">Elixir</span><span class="stack-chip">OTP</span><span
+                class="stack-chip">Python</span><span class="stack-chip">Gemini API</span><span
+                class="stack-chip">HNSWLib</span></div>
+            <details class="card-more">
+              <summary>About this project</summary>
+              <p>CDMS (Cognitive Digital Modelling System) isn't just a search tool—it's a decentralized brain. Instead
+                of static indexes, every file or OS process becomes an autonomous OTP actor. Queries trigger 'Spreading
+                Activation' where relevant nodes fire and pulse their neighbors. It features Hebbian learning ('nodes
+                that fire together, wire together') and a Phantom Engine for predictive failure simulations. The goal?
+                Giving AI agents the episodic memory needed to uncover 'unknown unknowns' in complex codebases.</p>
+            </details>
+            <div class="card-divider"></div>
+            <div class="card-links">
+              <a class="card-link" href="https://www.github.com/gifted87/cdms" target="_blank" rel="noopener">GitHub</a>
+              <a class="card-link" href="cognitive-substrate.html" target="_blank" rel="noopener">Paper</a>
+              <button class="card-link ai-link" onclick="openAI(5, event)">Ask AI</button>
+            </div>
+          </div>
+        </article>
+        <article class="card" data-index="6">
+          <div class="card-image"
+            style="background: linear-gradient(135deg, #1A0B0B 0%, #7F1D1D 40%, #450A0A 65%, #991B1B 100%);">
+            <span class="card-tag">Multi-Agent Orchestration System</span>
+            <span class="card-year">2026</span>
+          </div>
+          <div class="card-body">
+            <div class="card-title">ACN (Autonomous Cognitive Network)</div>
+            <div class="card-desc">A distributed, biologically-inspired multi-agent framework built on Elixir/OTP. It
+              uses a recursive node hierarchy to autonomously plan, build, and validate complex software engineering
+              tasks. It depends on the ACMS for its long-term memory</div>
+            <div class="card-stack"><span class="stack-chip">Elixir</span><span class="stack-chip">OTP</span><span
+                class="stack-chip">Rust</span><span class="stack-chip">Mnesia</span><span
+                class="stack-chip">Bumblebee</span></div>
+            <details class="card-more">
+              <summary>About this project</summary>
+              <p>ACN is a multi-agent AI framework built on the Erlang BEAM VM. It models task execution as a living
+                organism: 'Controller' agents legislate rules, 'TaskManagers' build execution DAGs, and 'Actuators'
+                write code inside Rust-based Firecracker microVMs. Its standout feature is the Panopticon—a holographic
+                observability layer that cryptographically tracks the system's cognitive, physical, and autonomic states
+                in a distributed Mnesia database.</p>
+            </details>
+            <div class="card-divider"></div>
+            <div class="card-links">
+              <a class="card-link" href="https://github.com/Gifted87/acn" target="_blank" rel="noopener">GitHub</a>
+              <a class="card-link" href="autonomous-cognitive-network.html" target="_blank" rel="noopener">Paper</a>
+              <button class="card-link ai-link" onclick="openAI(6, event)">Ask AI</button>
+            </div>
+          </div>
+        </article>
+        <article class="card" data-index="7">
+          <div class="card-image"
+            style="background: linear-gradient(135deg, #022C22 0%, #064E3B 40%, #022C22 65%, #059669 100%);">
+            <span class="card-tag">Autonomous AI Agent</span>
+            <span class="card-year">2026</span>
+          </div>
+          <div class="card-body">
+            <div class="card-title">ProCoder</div>
+            <div class="card-desc">ProCoder is a recursive, autonomous software engineer. It is designed to inhabit,
+              understand, and evolve complex codebases with the same architectural foresight and technical precision as
+              a senior lead engineer. It depends on the CDMS for modelling and navigating the codebase</div>
+            <div class="card-stack"><span class="stack-chip">Elixir</span><span class="stack-chip">Rust</span><span
+                class="stack-chip">OTP</span><span class="stack-chip">SQLite-VSS</span><span class="stack-chip">Gemini
+                API</span></div>
+            <details class="card-more">
+              <summary>About this project</summary>
+              <p>ProCoder is an industrial-grade autonomous coding agent built on the Erlang BEAM VM. Instead of relying
+                on raw text, it parses the entire codebase into an AST graph using Rustler and Tree-sitter. It features
+                a multi-layered OTP supervision tree to manage agent lifecycles, a strict Policy Engine for sandboxed
+                terminal executions (via Bubblewrap), and a Rewind Manager that uses LIFO state snapshots for atomic
+                rollbacks if an agent breaks the build.</p>
+            </details>
+            <div class="card-divider"></div>
+            <div class="card-links">
+              <a class="card-link" href="https://github.com/Gifted87/procoder" target="_blank" rel="noopener">GitHub</a>
+              <a class="card-link" href="sovereign-engineer.html" target="_blank" rel="noopener">Paper</a>
+              <button class="card-link ai-link" onclick="openAI(7, event)">Ask AI</button>
+            </div>
+          </div>
+        </article>
+        <article class="card" data-index="8">
+          <div class="card-image"
+            style="background: linear-gradient(135deg, #050B1A 0%, #1E3A8A 40%, #0B1733 65%, #0F2A5C 100%);">
+            <span class="card-tag">Military-Grade Embedded Security</span>
+            <span class="card-year">2025</span>
+          </div>
+          <div class="card-body">
+            <div class="card-title">Secure IoT Lock</div>
+            <div class="card-desc">A biometric / RFID smart lock fortified with AES-256 encryption, an ATECC608A
+              hardware secure element, ECDSA signed commands, MQTT over TLS 1.2/1.3 and anti-replay TOTP. Installed in
+              multiple commercial buildings with zero reported security breaches.</div>
+            <div class="card-stack"><span class="stack-chip">C++</span><span class="stack-chip">ESP32</span><span
+                class="stack-chip">ATECC608A</span><span class="stack-chip">MQTT/TLS</span><span
+                class="stack-chip">ECDSA</span><span class="stack-chip">TOTP</span></div>
+            <details class="card-more">
+              <summary>About this project</summary>
+              <p>The Secure IoT Lock performs all cryptographic operations — including ECDSA signing and verification —
+                internally inside an ATECC608A hardware secure element, so private keys are never extractable even with
+                physical access to the device. Commands between the lock and the server are ECDSA-signed, transport runs
+                over MQTT with TLS 1.2/1.3, and every authentication is gated by an anti-replay TOTP challenge. Deployed
+                in multiple commercial buildings with zero reported security breaches.</p>
+            </details>
+            <div class="card-divider"></div>
+            <div class="card-links">
+              <a class="card-link" href="https://github.com/gifted87/esp32-secure-lock" target="_blank"
+                rel="noopener">GitHub</a>
+              <button class="card-link ai-link" onclick="openAI(8, event)">Ask AI</button>
+            </div>
+          </div>
+        </article>
+        <article class="card" data-index="9">
+          <div class="card-image"
+            style="background: linear-gradient(135deg, #0B1512 0%, #166534 40%, #052E16 65%, #15803D 100%);">
+            <span class="card-tag">Multi-Agent Trading Analysis</span>
+            <span class="card-year">2025</span>
+          </div>
+          <div class="card-body">
+            <div class="card-title">TradingBot</div>
+            <div class="card-desc">A multi-AI-agent forex and crypto market analyzer that applies Smart Money Concepts
+              and Wyckoff methodology, analyzes multiple pairs in parallel, and delivers trading signals by email on
+              schedule.</div>
+            <div class="card-stack"><span class="stack-chip">Python</span><span class="stack-chip">SMC</span><span
+                class="stack-chip">Wyckoff</span><span class="stack-chip">GCP</span></div>
+            <details class="card-more">
+              <summary>About this project</summary>
+              <p>TradingBot is a multi-agent AI program that generates trading signals. It retrieves historical market
+                data, performs technical analysis using Smart Money Concepts and Wyckoff methodology across multiple
+                pairs in parallel, and delivers the results by email on a schedule.</p>
+            </details>
+            <div class="card-divider"></div>
+            <div class="card-links">
+              <a class="card-link" href="https://github.com/gifted87/TradingBot" target="_blank"
+                rel="noopener">GitHub</a>
+              <button class="card-link ai-link" onclick="openAI(9, event)">Ask AI</button>
+            </div>
+          </div>
+        </article>
+        <article class="card" data-index="10">
+          <div class="card-image"
+            style="background: linear-gradient(135deg, #0B1F14 0%, #14532D 40%, #052E16 65%, #166534 100%);">
+            <span class="card-tag">Embedded · Edge AI</span>
+            <span class="card-year">2025</span>
+          </div>
+          <div class="card-body">
+            <div class="card-title">TinyML Pump Monitor</div>
+            <div class="card-desc">Predictive maintenance for water pumps: an ATmega328P running bare-metal C classifies
+              faults from vibration analysis with 92% accuracy — Edge Impulse TinyML model in ~1.2KB RAM, Modbus RTU
+              integration and GSM SMS alerts.</div>
+            <div class="card-stack"><span class="stack-chip">C</span><span class="stack-chip">ATmega328P</span><span
+                class="stack-chip">Edge Impulse</span><span class="stack-chip">Modbus RTU</span></div>
+            <details class="card-more">
+              <summary>About this project</summary>
+              <p>This system performs intelligent vibration-based fault detection on a resource-constrained ATmega
+                microcontroller: a custom fixed-point FFT feeds an Edge Impulse TinyML model running in about 1.2KB of
+                RAM. It integrates with industrial PLC/SCADA environments over Modbus RTU and sends remote GSM SMS
+                alerts — slashing critical equipment downtime by 40% in field deployments.</p>
+            </details>
+            <div class="card-divider"></div>
+            <div class="card-links">
+              <a class="card-link" href="https://github.com/gifted87/atmega-tinyml-pump-monitor" target="_blank"
+                rel="noopener">GitHub</a>
+              <button class="card-link ai-link" onclick="openAI(10, event)">Ask AI</button>
+            </div>
+          </div>
+        </article>
+      </div>
     </div>
 
     <!-- Controls -->
@@ -1199,7 +1663,7 @@
       </button>
 
       <div class="dots" id="dots"></div>
-      <span class="nav-count" id="counter">1 / 6</span>
+      <span class="nav-count" id="counter">1 / 11</span>
 
       <button class="nav-btn" id="nextBtn" aria-label="Next">
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -1224,7 +1688,7 @@
           </div>
           <div>
             <div class="ai-modal-title" id="aiModalTitle">Learn about this project</div>
-            <div class="ai-modal-sub">Powered by Claude · Ask anything</div>
+            <div class="ai-modal-sub">AI Project Assistant · Ask anything</div>
           </div>
         </div>
         <button class="ai-close-btn" onclick="closeAI()">
@@ -1244,6 +1708,38 @@
       </div>
     </div>
   </div>
+
+  <!-- ── More builds: supporting projects ── -->
+  <section class="more-builds">
+    <h2>More builds</h2>
+    <p>Supporting systems, microservices and field deployments — all open source on GitHub.</p>
+    <div class="more-grid">
+      <a class="more-chip" href="https://github.com/gifted87/esp32-secure-lock" target="_blank" rel="noopener">Secure
+        IoT Lock <span>· ESP32 · zero breaches</span></a>
+      <a class="more-chip" href="https://github.com/gifted87/fraud-detection-engine" target="_blank"
+        rel="noopener">Fraud Detection Engine <span>· Kafka · Redis</span></a>
+      <a class="more-chip" href="https://github.com/gifted87/TradingBot" target="_blank" rel="noopener">TradingBot
+        <span>· autonomous agent</span></a>
+      <a class="more-chip" href="https://github.com/gifted87/Ecommerce-Backend" target="_blank"
+        rel="noopener">E-commerce Backend <span>· microservice</span></a>
+      <a class="more-chip" href="https://github.com/gifted87/Url-Shortener-Microservice" target="_blank"
+        rel="noopener">URL Shortener <span>· microservice</span></a>
+      <a class="more-chip" href="https://github.com/gifted87/Calculator-Microservice" target="_blank"
+        rel="noopener">Calculator <span>· microservice</span></a>
+      <a class="more-chip" href="https://github.com/gifted87/sharedCanvas" target="_blank" rel="noopener">sharedCanvas
+        <span>· P2P sharing</span></a>
+      <a class="more-chip" href="https://github.com/gifted87/Zazzaman" target="_blank" rel="noopener">Zazzaman <span>·
+          services marketplace</span></a>
+      <a class="more-chip" href="https://github.com/gifted87/ERPNEXT_Receipt_Printer" target="_blank"
+        rel="noopener">Receipt Printer <span>· offline POS</span></a>
+      <a class="more-chip" href="https://github.com/gifted87/FX_Price_Alert" target="_blank" rel="noopener">FX Price
+        Alert <span>· Telegram alerts</span></a>
+      <a class="more-chip" href="https://github.com/gifted87/IPFSS2" target="_blank" rel="noopener">Fence Security
+        <span>· Java · IoT</span></a>
+      <a class="more-chip" href="https://github.com/gifted87/TegassenAutobell" target="_blank" rel="noopener">Autobell
+        <span>· church bell automation</span></a>
+    </div>
+  </section>
 
   <div class="scroll-hint">
     Use arrow keys or swipe
@@ -1266,7 +1762,7 @@
     </div>
   </div>
 
-  
+
 
   <!-- Hire Modal -->
   <div class="profile-modal-backdrop" id="hire-modal-backdrop">
@@ -1276,16 +1772,25 @@
         <button class="p-modal-close" id="hire-modal-close">&times;</button>
       </div>
       <div class="hire-modal-body">
-        <p style="color: var(--text2); font-size: 16px; margin-bottom: 2rem; line-height: 1.6; font-family: var(--serif);">
-          For high-fidelity engineering or AI architecture inquiries, please reach out via <strong>Email</strong> or <strong>WhatsApp</strong>. These are my primary contact channels.
+        <p
+          style="color: var(--text2); font-size: 16px; margin-bottom: 2rem; line-height: 1.6; font-family: var(--serif);">
+          For high-fidelity engineering or AI architecture inquiries, please reach out via <strong>Email</strong> or
+          <strong>WhatsApp</strong>. These are my primary contact channels.
         </p>
         <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-          <a href="mailto:braimahgifted@gmail.com" class="hire-modal-link">
-            <svg width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M2 4L8 8L14 4M2 12H14V4H2V12Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>
-            braimahgifted@gmail.com
+          <a href="mailto:giftedb87@gmail.com" class="hire-modal-link">
+            <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
+              <path d="M2 4L8 8L14 4M2 12H14V4H2V12Z" stroke="currentColor" stroke-width="1.2"
+                stroke-linejoin="round" />
+            </svg>
+            giftedb87@gmail.com
           </a>
-          <a href="https://wa.me/2349113083786" target="_blank" class="hire-modal-link" style="background: rgba(37, 211, 102, 0.1); border-color: rgba(37, 211, 102, 0.2); color: #25D366;">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+          <a href="https://wa.me/2349065215137" target="_blank" class="hire-modal-link"
+            style="background: rgba(37, 211, 102, 0.1); border-color: rgba(37, 211, 102, 0.2); color: #25D366;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+            </svg>
             Chat on WhatsApp
           </a>
         </div>
@@ -1301,9 +1806,18 @@
         <button class="p-modal-close" id="artifacts-modal-close">&times;</button>
       </div>
       <div class="p-modal-body" style="padding: 2rem;">
-        <p style="color: var(--muted); font-size: 14px; margin-bottom: 1.5rem; font-family: var(--sans);">Select an artifact to view the technical implementation and source code.</p>
+        <p style="color: var(--muted); font-size: 14px; margin-bottom: 1.5rem; font-family: var(--sans);">Select an
+          artifact to view the technical implementation and source code.</p>
         <div id="artifacts-list" style="display: flex; flex-direction: column; gap: 1rem;">
-          <!-- Links will be injected here -->
+          <!-- Static artifact links (fetch-readable; JS replaces these when the modal opens) -->
+          <a href="https://github.com/Gifted87/fraud-detection-engine" target="_blank" class="artifact-item"><span
+              class="artifact-name">Fraud Detection Engine</span></a>
+          <a href="https://github.com/Gifted87/Ecommerce-Backend" target="_blank" class="artifact-item"><span
+              class="artifact-name">E-commerce Backend</span></a>
+          <a href="https://github.com/Gifted87/Calculator-Microservice" target="_blank" class="artifact-item"><span
+              class="artifact-name">Calculator Microservice</span></a>
+          <a href="https://github.com/Gifted87/Url-Shortener-Microservice" target="_blank" class="artifact-item"><span
+              class="artifact-name">URL Shortener Service</span></a>
         </div>
       </div>
     </div>
@@ -1325,10 +1839,12 @@
       font-size: 14px;
       transition: all 0.2s;
     }
+
     .hire-modal-link:hover {
       border-color: var(--accent);
       transform: translateY(-2px);
     }
+
     .artifact-item {
       display: flex;
       flex-direction: column;
@@ -1340,20 +1856,24 @@
       text-decoration: none;
       transition: all 0.2s;
     }
+
     .artifact-item:hover {
       border-color: var(--accent);
       transform: translateY(-2px);
       background: rgba(217, 119, 87, 0.05);
     }
+
     .artifact-name {
       font-family: var(--sans);
       font-size: 14px;
       font-weight: 500;
       color: var(--text);
     }
+
     .artifact-icon {
       color: var(--accent);
     }
+
     .extra-link {
       background: none;
       border: none;
@@ -1370,8 +1890,81 @@
       align-items: center;
       gap: 6px;
     }
+
     .extra-link:hover {
       color: var(--text);
+    }
+
+    /* Static fetch-readable project detail (JS carousel ignores it) */
+    .card-more {
+      margin: 0.85rem 0 0;
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--text2);
+    }
+
+    .card-more summary {
+      cursor: pointer;
+      font-family: var(--mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      margin-bottom: 0.4rem;
+    }
+
+    /* Supporting builds strip */
+    .more-builds {
+      position: relative;
+      z-index: 1;
+      width: min(880px, 92vw);
+      margin: 2.5rem auto 0;
+      padding-bottom: 3rem;
+      text-align: center;
+    }
+
+    .more-builds h2 {
+      font-family: var(--mono);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .more-builds p {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 1.25rem;
+    }
+
+    .more-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .more-chip {
+      font-family: var(--sans);
+      font-size: 12.5px;
+      color: var(--text2);
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 8px 14px;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .more-chip:hover {
+      border-color: var(--accent);
+      color: var(--text);
+      transform: translateY(-2px);
+    }
+
+    .more-chip span {
+      color: var(--muted);
     }
   </style>
   <script>
@@ -1379,6 +1972,39 @@
        PROJECT DATA
     ═══════════════════════════════════════════ */
     const projects = [
+      {
+        title: "Hospitality Core",
+        tag: "Enterprise ERP · Production",
+        year: "2026",
+        desc: "An enterprise-grade Property Management System built for Frappe/ERPNext — front office, financial engine, maintenance and expense management, group & corporate bookings, rate and inventory management. In daily production use at client hotels.",
+        stack: ["Frappe", "ERPNext", "Python", "MariaDB"],
+        github: "https://github.com/gifted87/erpnext_hospitality_core",
+        ai: "Hospitality Core transforms an ERPNext instance into a single-source-of-truth hotel operations platform, replacing fragmented third-party tools. It was designed for markets where robust internal controls, real-time inventory management and sophisticated corporate billing are paramount — prioritizing operational integrity over costly external API dependencies. It cut month-end financial reconciliation from days to hours.",
+        gradient: "linear-gradient(135deg, #2A1A08 0%, #92400E 40%, #451A03 65%, #B45309 100%)",
+        pattern: "grid"
+      },
+      {
+        title: "Virgo",
+        tag: "Autonomous AI Agent · Production",
+        year: "2026",
+        desc: "An autonomous AI assistant for ERPNext that performs server operations, complex database queries, data calculations, chart plotting and server-script execution in plain natural language — governed by real-time security approvals.",
+        stack: ["Python", "ReAct", "OpenAI API", "React", "MariaDB"],
+        github: "https://github.com/gifted87/Virgo-AI-Assistant-for-ERPNext",
+        ai: "Virgo leverages a ReAct (Reasoning and Acting) agent framework and is fully LLM-agnostic — compatible with any OpenAI-compliant endpoint including DeepSeek, local models via Ollama/vLLM, Groq or OpenAI. Every modifying action passes real-time security approval. It reduced routine admin and reporting work by ~70% and lets non-technical staff self-serve safely.",
+        gradient: "linear-gradient(135deg, #17082E 0%, #6D28D9 40%, #2E1065 65%, #7C3AED 100%)",
+        pattern: "dots"
+      },
+      {
+        title: "Nerd Master AI",
+        tag: "AI SaaS Platform",
+        year: "2025",
+        desc: "A full-stack AI assistant platform serving students, researchers and professionals — streaming LLM responses, Markdown/MathJax rendering, file uploads, per-task model customization and persistent conversation management across desktop and mobile.",
+        stack: ["Python", "JavaScript", "WebSockets", "MySQL"],
+        github: "https://github.com/gifted87/Nerd_Master_AI",
+        ai: "Nerd Master AI is a sophisticated interactive web application built to automate complex research, writing and study tasks. It streams responses asynchronously, renders mathematics and documents in real time, and keeps per-task model settings like temperature and top-p — shipped as a complete product for desktop and mobile users.",
+        gradient: "linear-gradient(135deg, #082032 0%, #2563EB 40%, #0A192F 65%, #3B82F6 100%)",
+        pattern: "waves"
+      },
       {
         title: "Obsidian Thinking Machine",
         tag: "Cognitive Architecture",
@@ -1446,27 +2072,37 @@
         gemini: "https://gemini.google.com/share/31c65d9a1625"
       },
       {
-        title: "Ovan",
-        tag: "AI Orchestration",
-        year: "2026",
-        desc: "A resilient Python orchestration engine that orchestrates the ACN and Procoder tieing them into a system of systems, managing the end-to-end pipeline from code genesis to production-ready verification.",
-        stack: ["Python", "Pexpect", "Gemini API", "State Machines"],
-        github: "https://github.com/Gifted87/ovan-the-orchestrator",
-        youtube: "https://www.youtube.com/watch?v=qqopP2Dgpsc",
-        ai: "Ovan is the master conductor for my autonomous coding ecosystem. It integrates ACN and ProCoder into a seamless 4-phase pipeline. The coolest part is its resilience: it uses `pexpect` to wrap unpredictable LLM agents in a strict state machine, automatically handling terminal limits, process freezes, and auto-approvals. In the final phases, it consolidates the entire codebase and feeds it to a 'Critic Agent' to hunt down logic stubs, wiring breaks, and architectural flaws before declaring the project production-ready.",
-        gradient: "linear-gradient(135deg, #0A192F 0%, #112A46 40%, #0A192F 65%, #183B59 100%)",
-        pattern: "waves",
-        gemini: "https://gemini.google.com/share/57fcc60b004a",
-        extraLink: { 
-          text: "View Artifacts", 
-          isModal: true,
-          artifacts: [
-            { name: "Fraud Detection Engine", url: "https://github.com/Gifted87/fraud-detection-engine" },
-            { name: "E-commerce Backend", url: "https://github.com/Gifted87/Ecommerce-Backend" },
-            { name: "Calculator Microservice", url: "https://github.com/Gifted87/Calculator-Microservice" },
-            { name: "URL Shortener Service", url: "https://github.com/Gifted87/Url-Shortener-Microservice" }
-          ]
-        }
+        title: "Secure IoT Lock",
+        tag: "Military-Grade Embedded Security",
+        year: "2025",
+        desc: "A biometric / RFID smart lock fortified with AES-256 encryption, an ATECC608A hardware secure element, ECDSA signed commands, MQTT over TLS 1.2/1.3 and anti-replay TOTP. Installed in multiple commercial buildings with zero reported security breaches.",
+        stack: ["C++", "ESP32", "ATECC608A", "MQTT/TLS", "ECDSA", "TOTP"],
+        github: "https://github.com/gifted87/esp32-secure-lock",
+        ai: "The Secure IoT Lock performs all cryptographic operations — including ECDSA signing and verification — internally inside an ATECC608A hardware secure element, so private keys are never extractable even with physical access to the device. Commands between the lock and the server are ECDSA-signed, transport runs over MQTT with TLS 1.2/1.3, and every authentication is gated by an anti-replay TOTP challenge. Deployed in multiple commercial buildings with zero reported security breaches.",
+        gradient: "linear-gradient(135deg, #050B1A 0%, #1E3A8A 40%, #0B1733 65%, #0F2A5C 100%)",
+        pattern: "circuit"
+      },
+      {
+        title: "TradingBot",
+        tag: "Multi-Agent Trading Analysis",
+        year: "2025",
+        desc: "A multi-AI-agent forex and crypto market analyzer that applies Smart Money Concepts and Wyckoff methodology, analyzes multiple pairs in parallel, and delivers trading signals by email on schedule.",
+        stack: ["Python", "SMC", "Wyckoff", "GCP"],
+        github: "https://github.com/gifted87/TradingBot",
+        ai: "TradingBot is a multi-agent AI program that generates trading signals. It retrieves historical market data, performs technical analysis using Smart Money Concepts and Wyckoff methodology across multiple pairs in parallel, and delivers the results by email on a schedule.",
+        gradient: "linear-gradient(135deg, #1A0A1A 0%, #831843 40%, #4A0E2E 65%, #9D174D 100%)",
+        pattern: "waves"
+      },
+      {
+        title: "TinyML Pump Monitor",
+        tag: "Embedded · Edge AI",
+        year: "2025",
+        desc: "Predictive maintenance for water pumps: an ATmega328P running bare-metal C classifies faults from vibration analysis with 92% accuracy — Edge Impulse TinyML model in ~1.2KB RAM, Modbus RTU integration and GSM SMS alerts.",
+        stack: ["C", "ATmega328P", "Edge Impulse", "Modbus RTU"],
+        github: "https://github.com/gifted87/atmega-tinyml-pump-monitor",
+        ai: "This system performs intelligent vibration-based fault detection on a resource-constrained ATmega microcontroller: a custom fixed-point FFT feeds an Edge Impulse TinyML model running in about 1.2KB of RAM. It integrates with industrial PLC/SCADA environments over Modbus RTU and sends remote GSM SMS alerts — slashing critical equipment downtime by 40% in field deployments.",
+        gradient: "linear-gradient(135deg, #0B1F14 0%, #14532D 40%, #052E16 65%, #166534 100%)",
+        pattern: "circuit"
       }
     ];
 
@@ -1498,13 +2134,16 @@
     ═══════════════════════════════════════════ */
     const track = document.getElementById('track');
     const dotsEl = document.getElementById('dots');
+    // Static cards are already in the DOM for fetch/no-JS readers; only build via JS when absent.
+    const hasStaticCards = track.querySelectorAll('.card').length > 0;
 
     projects.forEach((p, i) => {
-      const svgData = encodeURIComponent(patterns[p.pattern] || patterns.dots);
-      const cardEl = document.createElement('div');
-      cardEl.className = 'card';
-      cardEl.dataset.index = i;
-      cardEl.innerHTML = `
+      if (!hasStaticCards) {
+        const svgData = encodeURIComponent(patterns[p.pattern] || patterns.dots);
+        const cardEl = document.createElement('div');
+        cardEl.className = 'card';
+        cardEl.dataset.index = i;
+        cardEl.innerHTML = `
     <div class="card-image" style="
       background: ${p.gradient};
       background-image: ${p.gradient}, url('data:image/svg+xml,${svgData}');
@@ -1548,7 +2187,8 @@
       </div>
     </div>
   `;
-      track.appendChild(cardEl);
+        track.appendChild(cardEl);
+      } // end static-cards guard — dots below always build
 
       // Dot
       const dot = document.createElement('div');
@@ -1576,7 +2216,17 @@
 
     const carouselViewport = document.querySelector('.carousel-viewport');
 
+    function isMobile() {
+      return window.matchMedia('(max-width: 780px)').matches;
+    }
+
     function update() {
+      // On mobile the carousel is a vertical stack — skip the translate/classes
+      if (isMobile()) {
+        track.style.transform = '';
+        cards.forEach(c => c.classList.remove('is-active', 'is-adjacent', 'is-far'));
+        return;
+      }
       const cardW = getCardW();
       const gap = getCardGap();
       const step = cardW + gap;
@@ -1635,6 +2285,16 @@
       touchX = null;
     }, { passive: true });
 
+    // Stop wheel events on card body from also steering the carousel.
+    // Vertical wheel scroll on the card body must not move the carousel horizontally.
+    cards.forEach(c => {
+      const body = c.querySelector('.card-body');
+      if (!body) return;
+      body.addEventListener('wheel', e => {
+        if (e.deltaY !== 0) e.stopPropagation();
+      }, { passive: true });
+    });
+
     // Initial
     update();
 
@@ -1646,32 +2306,177 @@
     const aiInput = document.getElementById('aiInput');
     const aiTitle = document.getElementById('aiModalTitle');
     let currentProject = null;
+    let conversationHistory = [];
+    let isAiResponding = false;
+    const readmeCache = {};
 
-    const systemPrompts = {
-      intro: (p) => [
-        { role: 'assistant', text: `Hi! I can tell you all about **${p.title}**. What would you like to know?`, suggestions: ['How does it work?', 'What problem does it solve?', 'What was the hardest part to build?', 'Tech stack deep-dive'] }
-      ]
-    };
+    const OPENROUTER_API_KEY = "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";
+    const OPENROUTER_MODEL = "minimax/minimax-m3:free";
+    const OPENROUTER_ENDPOINT = "https://openrouter.ai/api/v1/chat/completions";
+
+    function escapeHtml(text) {
+      return (text || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function formatMarkdown(text) {
+      if (!text) return '';
+      const codeBlocks = [];
+
+      // 1. Extract fenced code blocks with ```
+      let processed = text.replace(/```([a-zA-Z0-9_-]*)\r?\n([\s\S]*?)```/g, (match, lang, codeContent) => {
+        const idx = codeBlocks.length;
+        codeBlocks.push('<pre><code>' + escapeHtml(codeContent.trim()) + '</code></pre>');
+        return `\n\n§§CODEBLOCK${idx}§§\n\n`;
+      });
+
+      processed = processed.replace(/```([\s\S]*?)```/g, (match, codeContent) => {
+        const idx = codeBlocks.length;
+        codeBlocks.push('<pre><code>' + escapeHtml(codeContent.trim()) + '</code></pre>');
+        return `\n\n§§CODEBLOCK${idx}§§\n\n`;
+      });
+
+      // 2. Escape HTML in remainder
+      processed = escapeHtml(processed);
+
+      // 3. Markdown tables
+      processed = processed.replace(/((?:\|[^\n]+\|\r?\n)+)/g, (tableMatch) => {
+        const rows = tableMatch.trim().split(/\r?\n/);
+        if (rows.length < 2) return tableMatch;
+        let html = '\n\n<table>';
+        let isHeader = true;
+        for (let r = 0; r < rows.length; r++) {
+          const row = rows[r].trim();
+          if (/^\|[\s\-:|]+\|$/.test(row)) {
+            isHeader = false;
+            continue;
+          }
+          const cells = row.split('|').slice(1, -1);
+          html += '<tr>';
+          cells.forEach(c => {
+            const tag = isHeader ? 'th' : 'td';
+            html += `<${tag}>${c.trim()}</${tag}>`;
+          });
+          html += '</tr>';
+        }
+        html += '</table>\n\n';
+        return html;
+      });
+
+      // 4. Headers
+      processed = processed.replace(/^### (.*$)/gim, '<strong style="display:block;margin:8px 0 3px;font-size:13.5px;color:var(--text);">$1</strong>');
+      processed = processed.replace(/^## (.*$)/gim, '<strong style="display:block;margin:10px 0 4px;font-size:14.5px;color:var(--text);">$1</strong>');
+      processed = processed.replace(/^# (.*$)/gim, '<strong style="display:block;margin:12px 0 5px;font-size:15.5px;color:var(--text);">$1</strong>');
+
+      // 5. Inline code
+      processed = processed.replace(/`([^`]+)`/g, '<code>$1</code>');
+
+      // 6. Bold & Italics
+      processed = processed.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+      processed = processed.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+
+      // 7. Lists
+      processed = processed.replace(/^[*\-] (.*$)/gim, '<li>$1</li>');
+      processed = processed.replace(/^\d+\. (.*$)/gim, '<li>$1</li>');
+      processed = processed.replace(/((?:<li>.*<\/li>[\r\n\s]*)+)/gim, '\n\n<ul>$1</ul>\n\n');
+
+      // 8. Paragraphs
+      const paras = processed.split(/\r?\n\r?\n+/);
+      processed = paras.map(p => {
+        p = p.trim();
+        if (!p) return '';
+        if (p.startsWith('§§CODEBLOCK') || p.includes('<ul>') || p.includes('<table>') || p.startsWith('<strong style')) {
+          return p;
+        }
+        return '<p>' + p.replace(/\r?\n/g, '<br>') + '</p>';
+      }).join('');
+
+      // 9. Restore code blocks
+      codeBlocks.forEach((cb, i) => {
+        processed = processed.replace(`§§CODEBLOCK${i}§§`, cb);
+      });
+
+      return processed;
+    }
+
+    async function fetchProjectReadme(p) {
+      if (!p || !p.github) return '';
+      const match = p.github.match(/github\.com\/([^\/]+)\/([^\/\#\?]+)/i);
+      if (!match) return '';
+      const owner = match[1];
+      const repo = match[2];
+      const key = `${owner}/${repo}`.toLowerCase();
+      if (readmeCache[key] !== undefined) return readmeCache[key];
+
+      // 1. Try GitHub API raw (supports CORS)
+      try {
+        const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/readme`, {
+          headers: { 'Accept': 'application/vnd.github.raw+json' }
+        });
+        if (res.ok) {
+          const text = await res.text();
+          readmeCache[key] = text.slice(0, 8000);
+          return readmeCache[key];
+        }
+      } catch (err) { }
+
+      // 2. Fallback to raw.githubusercontent.com
+      try {
+        let res = await fetch(`https://raw.githubusercontent.com/${owner}/${repo}/main/README.md`);
+        if (!res.ok) {
+          res = await fetch(`https://raw.githubusercontent.com/${owner}/${repo}/master/README.md`);
+        }
+        if (res.ok) {
+          const text = await res.text();
+          readmeCache[key] = text.slice(0, 8000);
+          return readmeCache[key];
+        }
+      } catch (err) { }
+
+      readmeCache[key] = '';
+      return '';
+    }
 
     function openAI(index, e) {
       if (e) e.stopPropagation();
       const p = projects[index];
-      
-      // If project has a specific Gemini share link, use it
-      if (p.gemini) {
-        window.open(p.gemini, '_blank');
-        return;
-      }
+      if (!p) return;
 
       currentProject = p;
+      conversationHistory = [];
       aiTitle.textContent = `Learn about ${currentProject.title}`;
       aiChat.innerHTML = '';
-      addBubble('assistant', `Hi! I can tell you all about <strong>${currentProject.title}</strong>. What would you like to know?`, ['How does it work?', 'What problem does it solve?', 'What was the hardest part?', 'Tech stack deep-dive']);
+
+      const suggestions = [
+        'How does it work?',
+        'What problem does it solve?',
+        'What was the hardest part to build?',
+        'Tech stack deep-dive'
+      ];
+
+      addBubble(
+        'assistant',
+        `Hi! I'm the AI technical assistant for <strong>${currentProject.title}</strong>. Ask me anything about its architecture, implementation details, or design decisions.`,
+        suggestions
+      );
+
       aiModal.classList.add('open');
       setTimeout(() => aiInput.focus(), 250);
+
+      // Pre-fetch README in background
+      fetchProjectReadme(currentProject);
     }
 
+    let currentAbortController = null;
+
     function closeAI() {
+      if (currentAbortController) {
+        currentAbortController.abort();
+        currentAbortController = null;
+      }
       aiModal.classList.remove('open');
     }
 
@@ -1709,35 +2514,157 @@
       if (t) t.remove();
     }
 
-    const responses = {
-      "how does it work": (p) => `${p.title} works by ${p.ai} The architecture prioritises low latency and developer ergonomics.`,
-      "what problem": (p) => `The core problem ${p.title} solves is making ${p.tag.toLowerCase()} more accessible to teams without specialised infrastructure expertise. ${p.ai}`,
-      "hardest part": (p) => `The toughest engineering challenge was building a reliable real-time feedback loop while keeping latency under 100ms. ${p.ai.split('.')[0]}. We had to rethink the data model three times before it clicked.`,
-      "tech stack": (p) => `${p.title} is built with <strong>${p.stack.join(', ')}</strong>. Each was chosen deliberately — ${p.stack[0]} for core compute performance, ${p.stack[1] || p.stack[0]} for the API surface, and the rest to keep the DX tight and the deploy footprint small.`,
-      "default": (p) => `Great question about ${p.title}! ${p.ai} Is there a specific aspect you'd like to dig into further?`
-    };
-
-    function getResponse(q, p) {
-      const lq = q.toLowerCase();
-      if (lq.includes('work') || lq.includes('how')) return responses['how does it work'](p);
-      if (lq.includes('problem') || lq.includes('solve') || lq.includes('why')) return responses['what problem'](p);
-      if (lq.includes('hard') || lq.includes('challenge') || lq.includes('difficult')) return responses['hardest part'](p);
-      if (lq.includes('stack') || lq.includes('tech') || lq.includes('build') || lq.includes('built')) return responses['tech stack'](p);
-      return responses['default'](p);
-    }
-
-    function sendAI() {
+    async function sendAI() {
+      if (isAiResponding) return;
       const q = aiInput.value.trim();
       if (!q || !currentProject) return;
+
       aiInput.value = '';
-      // Remove suggestion rows
       aiChat.querySelectorAll('.ai-suggestions').forEach(s => s.remove());
-      addBubble('user', q);
+      addBubble('user', escapeHtml(q));
       addTyping();
-      setTimeout(() => {
+      isAiResponding = true;
+      aiInput.disabled = true;
+
+      currentAbortController = new AbortController();
+
+      try {
+        const readme = await fetchProjectReadme(currentProject);
+
+        const systemPrompt = `You are an expert AI technical assistant representing Gift Braimah's project: "${currentProject.title}".
+Gift Braimah is a Fullstack Developer & AI Systems Engineer who designed and built this system.
+
+PROJECT DETAILS:
+- Title: ${currentProject.title}
+- Year: ${currentProject.year}
+- Tag/Domain: ${currentProject.tag}
+- Tech Stack: ${currentProject.stack.join(', ')}
+- Description: ${currentProject.desc}
+- Engineering & Architectural Background: ${currentProject.ai}
+${currentProject.github ? `- GitHub Repository: ${currentProject.github}` : ''}
+${readme ? `\nREADME / REPOSITORY CONTEXT:\n${readme}\n` : ''}
+
+INSTRUCTIONS:
+1. Answer the user's questions with high technical depth, precision, and clarity.
+2. Ground your answers directly in the project's actual architecture, tech stack, and design decisions.
+3. Be concise, articulate, and engineering-minded. Avoid generic fluff.
+4. You can use markdown (bullet points, bold text, code snippets, tables) to structure your explanations cleanly.`;
+
+        conversationHistory.push({ role: 'user', content: q });
+
+        const messages = [
+          { role: 'system', content: systemPrompt },
+          ...conversationHistory
+        ];
+
+        const res = await fetch(OPENROUTER_ENDPOINT, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
+            'Content-Type': 'application/json',
+            'HTTP-Referer': window.location.origin || 'https://giftbraimah.dev',
+            'X-Title': 'Gift Braimah Portfolio'
+          },
+          body: JSON.stringify({
+            model: OPENROUTER_MODEL,
+            messages: messages,
+            stream: true
+          }),
+          signal: currentAbortController.signal
+        });
+
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData?.error?.message || `HTTP ${res.status} ${res.statusText}`);
+        }
+
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder('utf-8');
+        let buffer = '';
+        let fullReply = '';
+        let assistantBubble = null;
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split('\n');
+          buffer = lines.pop();
+
+          for (const line of lines) {
+            const trimmed = line.trim();
+            if (!trimmed || trimmed.startsWith(':')) continue;
+            if (trimmed.startsWith('data:')) {
+              const dataStr = trimmed.slice(5).trim();
+              if (dataStr === '[DONE]') continue;
+              try {
+                const parsed = JSON.parse(dataStr);
+                const delta = parsed?.choices?.[0]?.delta?.content || '';
+                if (delta) {
+                  if (!assistantBubble) {
+                    removeTyping();
+                    assistantBubble = document.createElement('div');
+                    assistantBubble.className = 'ai-bubble assistant';
+                    aiChat.appendChild(assistantBubble);
+                  }
+                  fullReply += delta;
+                  assistantBubble.innerHTML = formatMarkdown(fullReply);
+                  aiChat.scrollTop = aiChat.scrollHeight;
+                }
+              } catch (e) { }
+            }
+          }
+        }
+
+        if (buffer.trim()) {
+          const trimmed = buffer.trim();
+          if (trimmed.startsWith('data:')) {
+            const dataStr = trimmed.slice(5).trim();
+            if (dataStr !== '[DONE]') {
+              try {
+                const parsed = JSON.parse(dataStr);
+                const delta = parsed?.choices?.[0]?.delta?.content || '';
+                if (delta) {
+                  if (!assistantBubble) {
+                    removeTyping();
+                    assistantBubble = document.createElement('div');
+                    assistantBubble.className = 'ai-bubble assistant';
+                    aiChat.appendChild(assistantBubble);
+                  }
+                  fullReply += delta;
+                  assistantBubble.innerHTML = formatMarkdown(fullReply);
+                  aiChat.scrollTop = aiChat.scrollHeight;
+                }
+              } catch (e) { }
+            }
+          }
+        }
+
         removeTyping();
-        addBubble('assistant', getResponse(q, currentProject));
-      }, 900 + Math.random() * 600);
+
+        if (fullReply) {
+          conversationHistory.push({ role: 'assistant', content: fullReply });
+        } else if (!assistantBubble) {
+          addBubble('assistant', 'No response received.');
+        }
+      } catch (err) {
+        if (err.name === 'AbortError') {
+          removeTyping();
+          return;
+        }
+        removeTyping();
+        console.error('Ask AI error:', err);
+        addBubble(
+          'assistant',
+          `<span style="color: var(--accent);">Failed to get response: ${escapeHtml(err.message)}. Please try again.</span>`
+        );
+      } finally {
+        currentAbortController = null;
+        isAiResponding = false;
+        aiInput.disabled = false;
+        aiInput.focus();
+      }
     }
 
     aiInput.addEventListener('keydown', e => { if (e.key === 'Enter') sendAI(); });
