@@ -735,7 +735,7 @@
 
     .delve-btn.visible {
       display: inline-flex;
-      animation: slowFadeIn 1.5s ease forwards;
+      animation: slowFadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
     @keyframes slowFadeIn {
@@ -1026,13 +1026,14 @@
 
     setTimeout(() => {
       render();
-      setTimeout(typeNext, 400);
-
-      // Show button after 12 seconds into the site (if not already visible)
       setTimeout(() => {
-        const btn = document.getElementById('delve-btn');
-        if (btn) btn.classList.add('visible');
-      }, 12000);
+        typeNext();
+        // Show skip button 1s into robot typing
+        setTimeout(() => {
+          const btn = document.getElementById('delve-btn');
+          if (btn) btn.classList.add('visible');
+        }, 1000);
+      }, 400);
     }, 350);
 
     // Button Click Logic: Skip or Navigate
